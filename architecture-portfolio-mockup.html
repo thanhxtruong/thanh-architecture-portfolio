@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thanh — Architecture Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#E4E6E0;
+    --paper-raised:#EFF0EB;
+    --paper-raised-2:#F4F5F0;
+    --ink:#181B19;
+    --ink-soft:#565E58;
+    --ink-faint:#8A918B;
+    --petrol:#114E47;
+    --petrol-bright:#18675C;
+    --amber:#8C591D;
+    --line:rgba(24,27,25,0.14);
+    --line-strong:rgba(24,27,25,0.26);
+    --serif:'Spectral',Georgia,'Times New Roman',serif;
+    --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+    --maxw:1180px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(120% 80% at 100% 0%, rgba(17,78,71,0.05), transparent 60%),
+      var(--paper);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-size:18px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  /* ---- Browser chrome ---- */
+  .chrome{
+    max-width:var(--maxw);
+    margin:26px auto 0;
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-bottom:none;
+    border-radius:8px 8px 0 0;
+    padding:11px 16px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .dots{display:flex;gap:7px;}
+  .dots span{width:11px;height:11px;border-radius:50%;background:var(--line-strong);opacity:.5;}
+  .urlbar{
+    flex:1;
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--ink-soft);
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:5px;
+    padding:5px 12px;
+    letter-spacing:.01em;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .urlbar .lock{color:var(--petrol);}
+  .chrome-tag{font-family:var(--mono);font-size:11px;color:var(--ink-faint);letter-spacing:.08em;text-transform:uppercase;}
+
+  .frame{
+    max-width:var(--maxw);
+    margin:0 auto 60px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:0 0 8px 8px;
+    overflow:hidden;
+  }
+
+  /* ---- Layout ---- */
+  .site{
+    display:grid;
+    grid-template-columns:266px 1fr;
+    align-items:start;
+  }
+  .rail{
+    position:sticky;
+    top:0;
+    align-self:start;
+    padding:40px 30px 40px 40px;
+    border-right:1px solid var(--line);
+    min-height:100%;
+  }
+  .main{
+    padding:52px 64px 40px;
+    min-width:0;
+  }
+
+  /* ---- Rail ---- */
+  .wordmark{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:26px;
+    letter-spacing:-.01em;
+    line-height:1;
+    margin:0 0 8px;
+  }
+  .wordmark .dot{color:var(--petrol);}
+  .rail-role{
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--ink-soft);
+    letter-spacing:.02em;
+    line-height:1.5;
+    margin:0 0 34px;
+  }
+  .nav-label{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin:0 0 14px;
+  }
+  .nav{list-style:none;margin:0 0 34px;padding:0;}
+  .nav li{margin:0 0 2px;}
+  .nav a{
+    display:flex;
+    align-items:baseline;
+    gap:11px;
+    text-decoration:none;
+    color:var(--ink);
+    padding:7px 8px 7px 0;
+    border-bottom:1px solid transparent;
+    transition:color .18s ease, border-color .18s ease;
+  }
+  .nav a:hover,.nav a:focus-visible{color:var(--petrol);border-bottom-color:var(--line);}
+  .nav .num{font-family:var(--mono);font-size:11px;color:var(--petrol);width:20px;flex:none;}
+  .nav .txt{font-size:16px;}
+  .nav .ct{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-faint);}
+
+  .rail-note{
+    border-top:1px solid var(--line);
+    padding-top:18px;
+  }
+  .rail-note .nl{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);margin:0 0 7px;}
+  .rail-note p{font-size:13.5px;line-height:1.5;color:var(--ink-soft);margin:0;}
+
+  /* ---- Hero ---- */
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:11.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--petrol);
+    margin:0 0 22px;
+    display:flex;align-items:center;gap:12px;
+  }
+  .eyebrow::after{content:"";height:1px;flex:1;background:var(--line);}
+  .hero h1{
+    font-family:var(--serif);
+    font-weight:700;
+    font-size:clamp(38px,5.4vw,60px);
+    line-height:1.04;
+    letter-spacing:-.02em;
+    margin:0 0 24px;
+    max-width:16ch;
+  }
+  .hero h1 em{font-style:italic;font-weight:600;color:var(--petrol);}
+  .hero .lede{
+    font-size:20px;
+    line-height:1.55;
+    color:var(--ink-soft);
+    max-width:60ch;
+    margin:0;
+  }
+  .hero .lede strong{color:var(--ink);font-weight:600;}
+
+  .rule{height:1px;background:var(--line);margin:50px 0;}
+  .rule--tight{margin:38px 0;}
+
+  /* ---- Section heads ---- */
+  .sec-head{margin:0 0 26px;}
+  .sec-head .k{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    display:flex;align-items:baseline;gap:10px;
+    margin:0 0 10px;
+  }
+  .sec-head .k b{color:var(--petrol);font-weight:600;}
+  .sec-head h2{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:27px;
+    letter-spacing:-.01em;
+    margin:0 0 6px;
+  }
+  .sec-head .sub{font-size:15.5px;color:var(--ink-soft);margin:0;max-width:64ch;font-style:italic;}
+
+  /* ---- Index cards ---- */
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{
+    display:block;
+    text-decoration:none;
+    color:inherit;
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-left:2px solid var(--line-strong);
+    border-radius:3px;
+    padding:20px 24px;
+    transition:transform .2s ease, border-color .2s ease, background .2s ease;
+  }
+  .card:hover,.card:focus-visible{
+    transform:translateY(-2px);
+    border-color:var(--line-strong);
+    border-left-color:var(--petrol);
+    background:var(--paper-raised-2);
+  }
+  .card-meta{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--ink-soft);
+    letter-spacing:.02em;
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    margin:0 0 11px;
+  }
+  .card-meta .sep{color:var(--line-strong);}
+  .card h3{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:21px;
+    letter-spacing:-.01em;
+    line-height:1.2;
+    margin:0 0 8px;
+  }
+  .card p{font-size:15.5px;color:var(--ink-soft);margin:0;line-height:1.5;}
+  .mini{list-style:none;margin:13px 0 0;padding:0;display:flex;flex-direction:column;gap:5px;}
+  .mini li{font-family:var(--mono);font-size:12px;color:var(--ink-soft);display:flex;gap:9px;line-height:1.4;}
+  .mini li b{color:var(--petrol);font-weight:600;flex:none;}
+
+  /* ---- Status pill ---- */
+  .status{
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:var(--mono);font-size:10.5px;font-weight:500;
+    letter-spacing:.08em;text-transform:uppercase;
+  }
+  .status .d{width:7px;height:7px;border-radius:50%;flex:none;}
+  .status--accepted .d{background:var(--petrol);}
+  .status--accepted{color:var(--petrol);}
+  .status--superseded .d{background:var(--amber);}
+  .status--superseded{color:var(--amber);}
+
+  /* ---- Reading view ---- */
+  .reading-label{
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-faint);text-align:center;margin:0 0 34px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .reading-label::before,.reading-label::after{content:"";height:1px;flex:1;background:var(--line);}
+
+  article{max-width:70ch;}
+  .doc-head{margin:0 0 30px;}
+  .doc-head .eyebrow{margin-bottom:16px;}
+  .doc-head h2.title{
+    font-family:var(--serif);font-weight:700;font-size:clamp(28px,3.6vw,38px);
+    line-height:1.1;letter-spacing:-.018em;margin:0 0 18px;
+  }
+  .doc-meta{
+    display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;
+    font-family:var(--mono);font-size:12px;color:var(--ink-soft);
+    padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  }
+  .doc-meta .f{color:var(--ink-faint);}
+
+  article h3{
+    font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--petrol);margin:34px 0 14px;
+  }
+  article p{margin:0 0 16px;}
+  article p .k{font-family:var(--mono);font-size:.86em;background:var(--paper-raised);border:1px solid var(--line);border-radius:3px;padding:1px 6px;color:var(--petrol);}
+  article strong{font-weight:600;}
+
+  /* ---- Decision spine (signature) ---- */
+  .fork{position:relative;margin:20px 0 8px;padding-left:2px;}
+  .fork::before{
+    content:"";position:absolute;left:6px;top:10px;bottom:10px;width:2px;
+    background:linear-gradient(var(--line-strong),var(--line-strong));
+  }
+  .opt{position:relative;padding:0 0 22px 34px;}
+  .opt:last-child{padding-bottom:0;}
+  .opt .marker{
+    position:absolute;left:0;top:3px;width:14px;height:14px;border-radius:50%;
+    background:var(--paper);border:2px solid var(--line-strong);z-index:1;
+  }
+  .opt--rejected .marker{border-style:solid;}
+  .opt--chosen .marker{
+    width:16px;height:16px;left:-1px;top:2px;
+    background:var(--petrol);border:3px solid var(--paper);
+    box-shadow:0 0 0 2px var(--petrol);
+  }
+  .opt-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 6px;}
+  .opt-name{font-family:var(--serif);font-size:18px;font-weight:600;letter-spacing:-.005em;}
+  .opt--rejected .opt-name{color:var(--ink-soft);}
+  .opt--rejected .opt-name .strike{text-decoration:line-through;text-decoration-color:var(--line-strong);text-decoration-thickness:1px;}
+  .opt--chosen .opt-name{color:var(--ink);}
+  .tag{
+    font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;
+    padding:2px 8px;border-radius:2px;flex:none;
+  }
+  .tag--rejected{color:var(--ink-soft);background:var(--paper-raised);border:1px solid var(--line);}
+  .tag--defer{color:var(--amber);background:rgba(140,89,29,.08);border:1px solid rgba(140,89,29,.28);}
+  .tag--chosen{color:var(--paper-raised-2);background:var(--petrol);}
+  .opt p{font-size:15.5px;line-height:1.55;margin:0;color:var(--ink-soft);}
+  .opt--chosen p{color:var(--ink);}
+
+  /* consequences grid */
+  .cons{display:grid;grid-template-columns:1fr;gap:2px;margin:8px 0 0;border:1px solid var(--line);border-radius:4px;overflow:hidden;}
+  .cons > div{padding:15px 18px;background:var(--paper-raised);}
+  .cons .cl{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 7px;}
+  .cons .pos .cl{color:var(--petrol);}
+  .cons .neg .cl{color:var(--ink-soft);}
+  .cons .rev .cl{color:var(--amber);}
+  .cons p{font-size:14.5px;line-height:1.5;margin:0;color:var(--ink-soft);}
+
+  /* ---- Case study scenarios ---- */
+  .scenarios{counter-reset:sc;margin:18px 0 0;}
+  .scenario{
+    position:relative;padding:22px 24px 22px 62px;
+    background:var(--paper-raised);border:1px solid var(--line);border-radius:4px;margin:0 0 12px;
+  }
+  .scenario::before{
+    counter-increment:sc;content:counter(sc,decimal-leading-zero);
+    position:absolute;left:20px;top:22px;
+    font-family:var(--mono);font-size:13px;font-weight:600;color:var(--petrol);
+  }
+  .scenario h4{font-family:var(--serif);font-size:18px;font-weight:600;margin:0 0 4px;letter-spacing:-.005em;}
+  .scenario .kind{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 10px;}
+  .scenario p{font-size:15px;line-height:1.55;margin:0 0 10px;color:var(--ink-soft);}
+  .scenario .ctrl{
+    font-size:14.5px;line-height:1.5;margin:0;padding:11px 14px;
+    background:var(--paper);border-left:2px solid var(--petrol);border-radius:2px;color:var(--ink);
+  }
+  .scenario .ctrl b{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--petrol);display:block;margin:0 0 4px;font-weight:600;}
+
+  /* ---- Footer ---- */
+  .foot{
+    border-top:1px solid var(--line);
+    margin-top:52px;padding-top:26px;
+    display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:14px;
+    font-family:var(--mono);font-size:12px;color:var(--ink-faint);letter-spacing:.02em;
+  }
+  .foot a{color:var(--petrol);text-decoration:none;}
+  .foot a:hover{text-decoration:underline;}
+
+  /* ---- Reveal animation ---- */
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1;transform:none;}
+
+  :focus-visible{outline:2px solid var(--petrol);outline-offset:3px;border-radius:2px;}
+
+  @media (max-width:860px){
+    .site{grid-template-columns:1fr;}
+    .rail{position:static;border-right:none;border-bottom:1px solid var(--line);padding:30px 26px;}
+    .main{padding:36px 26px;}
+    .nav{margin-bottom:0;}
+    .rail-note{display:none;}
+  }
+  @media (max-width:560px){
+    body{font-size:17px;}
+    .chrome-tag{display:none;}
+    .main{padding:30px 20px;}
+    .cons{grid-template-columns:1fr;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    .reveal{opacity:1;transform:none;transition:none;}
+    .card,.nav a{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<!-- browser chrome -->
+<div class="chrome">
+  <div class="dots"><span></span><span></span><span></span></div>
+  <div class="urlbar"><span class="lock">&#128274;</span>&nbsp; thanh.dev / portfolio</div>
+  <div class="chrome-tag">Mockup · Quartz v4</div>
+</div>
+
+<div class="frame">
+<div class="site">
+
+  <!-- LEFT RAIL -->
+  <aside class="rail">
+    <div class="wordmark">Thanh<span class="dot">.</span></div>
+    <p class="rail-role">Tradeoffs in production<br>systems · decision records</p>
+
+    <p class="nav-label">Contents</p>
+    <ul class="nav">
+      <li><a href="#decisions"><span class="num">01</span><span class="txt">Decisions</span><span class="ct">4</span></a></li>
+      <li><a href="#cases"><span class="num">02</span><span class="txt">Case studies</span><span class="ct">2</span></a></li>
+      <li><a href="#practice"><span class="num">03</span><span class="txt">On practice</span><span class="ct">3</span></a></li>
+    </ul>
+
+    <div class="rail-note">
+      <p class="nl">Note</p>
+      <p>Every piece here is sanitized — identifying details abstracted, the reasoning kept intact.</p>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HERO -->
+    <section class="hero reveal">
+      <p class="eyebrow">Portfolio · Software architecture</p>
+      <h1>Decisions, and the <em>roads not taken.</em></h1>
+      <p class="lede">A record of load-bearing decisions I've made and hard problems I've reasoned through in production systems — written to show <strong>how I weigh tradeoffs</strong>, not just what I shipped.</p>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- LAYER 1 INDEX -->
+    <section id="decisions" class="reveal">
+      <div class="sec-head">
+        <p class="k"><b>01</b> — Decision records</p>
+        <h2>Decisions</h2>
+        <p class="sub">The load-bearing choices — why each was made, and what was rejected.</p>
+      </div>
+
+      <div class="cards">
+        <a class="card" href="#adr-topics">
+          <div class="card-meta">
+            <span class="status status--accepted"><span class="d"></span>Accepted</span>
+            <span class="sep">/</span><span>2026-06-02</span>
+            <span class="sep">/</span><span class="f">use-service-bus-topics-for-telemetry-fanout.md</span>
+          </div>
+          <h3>Use Service Bus topics for telemetry fan-out</h3>
+          <p>One inbound telemetry stream, three independent consumers each needing the full stream. Topics vs. queues vs. Event Hubs — and why streaming was the right tool for the wrong problem.</p>
+        </a>
+
+        <a class="card" href="#adr-topics">
+          <div class="card-meta">
+            <span class="status status--accepted"><span class="d"></span>Accepted</span>
+            <span class="sep">/</span><span>2026-05-19</span>
+            <span class="sep">/</span><span class="f">row-level-scoping-at-query-layer.md</span>
+          </div>
+          <h3>Enforce row-level data scoping at the query layer</h3>
+          <p>Preventing cross-audience data exposure (IDOR) as a deterministic boundary in the persistence layer, distinct from role checks above it.</p>
+        </a>
+
+        <a class="card" href="#adr-topics">
+          <div class="card-meta">
+            <span class="status status--superseded"><span class="d"></span>Superseded</span>
+            <span class="sep">/</span><span>2026-04-30</span>
+            <span class="sep">/</span><span class="f">poll-erp-on-schedule.md</span>
+          </div>
+          <h3>Poll the ERP on a fixed schedule</h3>
+          <p>An early decision, later superseded by event-driven sync. Kept in the record because the reasoning that turned out wrong is worth preserving.</p>
+        </a>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- LAYER 2 INDEX -->
+    <section id="cases" class="reveal">
+      <div class="sec-head">
+        <p class="k"><b>02</b> — Case studies</p>
+        <h2>Case studies</h2>
+        <p class="sub">Not "here's a decision" but "here's a problem I reasoned through," end to end.</p>
+      </div>
+
+      <div class="cards">
+        <a class="card" href="#case-ovn">
+          <div class="card-meta">
+            <span>Distributed systems</span>
+            <span class="sep">/</span><span>~12 min read</span>
+            <span class="sep">/</span><span class="f">stale-writes-erp-sync.md</span>
+          </div>
+          <h3>Controlling stale writes in an ERP-to-portal sync</h3>
+          <p>One symptom — a write gets dropped — with three unrelated root causes. Separating them was the whole job.</p>
+          <ul class="mini">
+            <li><b>01</b> An inbound event overtakes a queued write — an ordering problem</li>
+            <li><b>02</b> Two of our own writes race each other — a parallelism problem</li>
+            <li><b>03</b> Two users on the same snapshot — a concurrency problem</li>
+          </ul>
+        </a>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- LAYER 3 INDEX -->
+    <section id="practice" class="reveal">
+      <div class="sec-head">
+        <p class="k"><b>03</b> — On practice</p>
+        <h2>On practice</h2>
+        <p class="sub">How I document, and why. Supporting evidence — not the headline.</p>
+      </div>
+      <div class="cards">
+        <a class="card" href="#practice">
+          <div class="card-meta"><span>Practice</span><span class="sep">/</span><span class="f">adrs-are-not-architecture-docs.md</span></div>
+          <h3>ADRs and architecture docs are not the same document</h3>
+          <p>Two artifacts that fail in opposite ways — one immutable and about <em>why</em>, one living and about <em>what</em>. Conflating them undermines both.</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ READING VIEW ============ -->
+    <div style="height:16px"></div>
+    <p class="reading-label">Reading view</p>
+
+    <!-- RENDERED ADR -->
+    <article id="adr-topics" class="reveal">
+      <div class="doc-head">
+        <p class="eyebrow">Decision record</p>
+        <h2 class="title">Use Service Bus topics for telemetry fan-out</h2>
+        <div class="doc-meta">
+          <span class="status status--accepted"><span class="d"></span>Accepted</span>
+          <span>2026-06-02</span>
+          <span class="f">deciders: me (proposing), squad architect (reviewing)</span>
+        </div>
+      </div>
+
+      <h3>Context</h3>
+      <p>Device telemetry arrives as a continuous stream of events. Three independent consumers need it: a <strong>customer portal</strong> showing near-real-time status, an <strong>operations</strong> pipeline raising service tickets on faults, and a <strong>partner analytics</strong> rollup. The three are genuinely independent — different rates, different uptime expectations, and one failing must not stall the others. Each needs its <strong>own copy</strong> of every event.</p>
+      <p>Volume sits in the low thousands of events per minute, with headroom but no near-term order-of-magnitude jump expected. The team operates Azure Service Bus in production; it has no experience operating a partitioned streaming log. The decision: <strong>how do we distribute one telemetry stream to multiple independent consumers?</strong></p>
+
+      <h3>Options considered</h3>
+      <div class="fork">
+        <div class="opt opt--rejected">
+          <span class="marker"></span>
+          <div class="opt-head">
+            <span class="opt-name"><span class="strike">Single queue, competing consumers</span></span>
+            <span class="tag tag--rejected">Rejected</span>
+          </div>
+          <p>A queue is point-to-point. Competing consumers <em>split</em> messages between them; they don't each get the full stream. Giving three consumers three full copies would push routing into application code that the messaging layer exists to handle. Wrong tool for a fan-out shape.</p>
+        </div>
+
+        <div class="opt opt--rejected">
+          <span class="marker"></span>
+          <div class="opt-head">
+            <span class="opt-name"><span class="strike">Event Hubs</span></span>
+            <span class="tag tag--defer">Rejected — for now</span>
+          </div>
+          <p>The "correct" answer at high scale: consumer groups each read the full stream, with replay and stream analytics. Rejected only for now — it solves a throughput problem we don't have, shifts real operational complexity (offsets, partition ordering, rebalancing) onto a team with no streaming experience, and makes us build the per-consumer dead-lettering that topics give natively. Buying capability we don't need at a complexity cost we'd feel immediately.</p>
+        </div>
+
+        <div class="opt opt--chosen">
+          <span class="marker"></span>
+          <div class="opt-head">
+            <span class="opt-name">Service Bus topics + subscriptions</span>
+            <span class="tag tag--chosen">Chosen</span>
+          </div>
+          <p>One subscription per consumer. Each gets an independent copy of every message, its own dead-letter queue, its own delivery state, and optional per-subscription filtering. Maps exactly onto "three independent consumers, each needs the full stream, each fails independently" — at a scale the technology handles comfortably, on infrastructure the team already operates.</p>
+        </div>
+      </div>
+
+      <h3>Decision</h3>
+      <p>Use a <strong>Service Bus topic with one subscription per downstream consumer.</strong> Independent-copy-per-subscriber semantics match the problem directly, per-subscription dead-lettering isolates failure for free, and we stay on infrastructure the team can operate with confidence.</p>
+
+      <h3>Consequences</h3>
+      <div class="cons">
+        <div class="pos"><p class="cl">Positive</p><p>Consumers fully decoupled and fail independently. Per-subscription DLQs isolate poison messages. Filters route subsets without new topics. No new operational knowledge required.</p></div>
+        <div class="neg"><p class="cl">Accepted costs</p><p>Higher per-message cost than a streaming log at scale. A throughput ceiling we sit under but must monitor. No replay — once consumed from a subscription, a message is gone.</p></div>
+        <div class="rev"><p class="cl">Revisit trigger</p><p>Reconsider Event Hubs if sustained volume approaches the topic ceiling, we need to replay history to rebuild consumer state, or we add a stream-analytics consumer that wants a partitioned log natively.</p></div>
+      </div>
+    </article>
+
+    <div class="rule"></div>
+
+    <!-- RENDERED CASE STUDY (compact) -->
+    <article id="case-ovn" class="reveal">
+      <div class="doc-head">
+        <p class="eyebrow">Case study · Distributed systems</p>
+        <h2 class="title">Controlling stale writes in an ERP-to-portal sync</h2>
+        <div class="doc-meta">
+          <span>~12 min read</span>
+          <span class="f">version-guarded writes · outbox · optimistic concurrency</span>
+        </div>
+      </div>
+
+      <p>We keep an internal copy of records that originate in an external ERP. Changes flow out as events and land through an <strong>outbox</strong> on our side, so a user action and its propagation are decoupled. The ERP stamps every record with a monotonically increasing <strong>version number</strong> (the OVN) — the only trustworthy signal for "which version is newer," since timestamps across two systems and a bus can't be trusted for ordering.</p>
+      <p>The goal: <strong>never regress to an older version than one we've already seen</strong>, no matter how events and writes interleave. "Last write wins" is a bug here, because "last to arrive" isn't "last in truth." There turned out to be three distinct ways a stale write could sneak in — each needing its own control.</p>
+
+      <div class="scenarios">
+        <div class="scenario">
+          <h4>An inbound event overtakes a queued write</h4>
+          <p class="kind">Root cause: arrival ordering</p>
+          <p>A portal edit stages an outbox entry at OVN <span class="k">n+1</span> that hasn't drained. The ERP emits its own event for the same record at OVN <span class="k">n</span> — older, but on a shorter path, so it lands first. Applied blindly, the store briefly serves a version we already know is superseded.</p>
+          <p class="ctrl"><b>Control — version-guarded writes</b>Every write carries its OVN and applies only if <span class="k">incoming &gt; current</span>. The stale <span class="k">n</span> is compared and dropped. Arrival order stops mattering; only version order does. The comparison and write are one atomic operation, so it can't be raced.</p>
+        </div>
+
+        <div class="scenario">
+          <h4>Two of our own writes race each other</h4>
+          <p class="kind">Root cause: drain parallelism</p>
+          <p>Two quick edits stage <span class="k">n+1</span> then <span class="k">n+2</span>. With any drain parallelism or retry reordering, <span class="k">n+2</span> can land first. The guard already keeps this <em>correct</em> — the late <span class="k">n+1</span> fails <span class="k">n+1 &gt; n+2</span> and drops — but a naive retry loop would thrash re-attempting it.</p>
+          <p class="ctrl"><b>Control — retire, don't retry</b>Treat a guard-rejected entry as successfully obsolete, not failed: acknowledge and drop it. A superseded write isn't an error to recover from; it's a no-op to retire. That distinction is what keeps the outbox from generating phantom retry load.</p>
+        </div>
+
+        <div class="scenario">
+          <h4>Two users on the same snapshot</h4>
+          <p class="kind">Root cause: concurrent intent — a different problem class</p>
+          <p>Two users both load at OVN <span class="k">n</span> and both edit, each staging <span class="k">n+1</span> with a <em>different</em> real change. The monotonic guard doesn't save us: it applies the first <span class="k">n+1</span>, then drops the second as "not greater" — silently eating a real edit. This is a lost update, not a stale duplicate.</p>
+          <p class="ctrl"><b>Control — optimistic concurrency at edit time</b>Reject the second save back to the user on the stale snapshot, with reload-and-reapply, so the conflict surfaces to a human instead of being resolved by silent last-write-wins. Recognizing that an identical symptom had two unrelated causes is the architectural point — conflating them would have shipped a control that quietly discarded real edits.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- FOOTER -->
+    <div class="foot">
+      <span>Built with Obsidian → Quartz v4 · all content sanitized</span>
+      <span><a href="#">RSS</a> · <a href="#">GitHub</a> · <a href="#">Notes</a></span>
+    </div>
+
+  </main>
+</div>
+</div>
+
+<script>
+  (function(){
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var els = document.querySelectorAll('.reveal');
+    if(reduce || !('IntersectionObserver' in window)){
+      els.forEach(function(e){e.classList.add('in');});
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    },{threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+    els.forEach(function(e){io.observe(e);});
+  })();
+</script>
+</body>
+</html>

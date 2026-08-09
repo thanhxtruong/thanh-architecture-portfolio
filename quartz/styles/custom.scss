@@ -342,15 +342,16 @@ a.portfolio-card {
     border: none;
     border-radius: 0;
     background: transparent;
-    padding: 0 0 22px 34px;
+    padding: 0 0 22px 40px;
     position: relative;
     margin: 0;
+    overflow: visible;
 
     // The spine line — added via a wrapper's ::before
     &::before {
       content: "";
       position: absolute;
-      left: 6px;
+      left: 12px;
       top: 0;
       bottom: 0;
       width: 2px;
@@ -387,7 +388,7 @@ a.portfolio-card {
     .callout-title::before {
       content: "";
       position: absolute;
-      left: 0;
+      left: 4px;
       top: 3px;
       width: 14px;
       height: 14px;
@@ -460,7 +461,7 @@ a.portfolio-card {
     .callout-title::before {
       content: "";
       position: absolute;
-      left: -1px;
+      left: 2px;
       top: 2px;
       width: 16px;
       height: 16px;
