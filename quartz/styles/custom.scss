@@ -675,12 +675,31 @@ article {
   font-size: 12px;
   color: var(--ink-soft);
   padding: 14px 0;
-  border-top: 1px solid var(--hairline);
-  border-bottom: 1px solid var(--hairline);
+  border-top: 1px solid var(--hairline-strong);
+  border-bottom: 1px solid var(--hairline-strong);
   margin: 18px 0 30px;
 
   .doc-meta-faint {
     color: var(--ink-faint);
+  }
+}
+
+.eyebrow:has(+ .doc-meta) {
+  margin-bottom: 14px;
+
+  &::after {
+    display: none;
+  }
+}
+
+.eyebrow + .doc-meta {
+  margin-top: 0;
+}
+
+.center:has(article .doc-meta) .page-header {
+  .content-meta,
+  .tags {
+    display: none;
   }
 }
 

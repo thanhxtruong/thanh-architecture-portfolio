@@ -1,6 +1,6 @@
 ---
 title: "Use Service Bus topics for telemetry fan-out"
-publish: true
+publish: false
 date: 2026-06-02
 description: "One inbound telemetry stream, three independent consumers each needing the full stream. Topics vs. queues vs. Event Hubs — and why streaming was the right tool for the wrong problem."
 tags: [adr]

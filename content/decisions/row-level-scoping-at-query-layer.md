@@ -1,6 +1,6 @@
 ---
 title: "Enforce row-level data scoping at the query layer"
-publish: true
+publish: false
 date: 2026-05-19
 description: "Preventing cross-audience data exposure (IDOR) as a deterministic boundary in the persistence layer, distinct from role checks above it."
 tags: [adr]

@@ -1,6 +1,6 @@
 ---
 title: "Poll the ERP on a fixed schedule"
-publish: true
+publish: false
 date: 2026-04-30
 description: "An early decision, later superseded by event-driven sync. Kept in the record because the reasoning that turned out wrong is worth preserving."
 tags: [adr]
