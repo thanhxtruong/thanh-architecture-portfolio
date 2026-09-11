@@ -1,6 +1,6 @@
 ---
 title: Explicit Wire-Format Mapping for an Enum, Not Enum Reuse
-publish: true
+publish: false
 date: 2026-07-28
 description: When a third-party API expected a different string format for an enum value than what our internal type and datastore already used, we mapped explicitly at the outbound serialization boundary rather than changing the enum itself, to avoid breaking existing consumers and stored data.
 tags: [adr]
