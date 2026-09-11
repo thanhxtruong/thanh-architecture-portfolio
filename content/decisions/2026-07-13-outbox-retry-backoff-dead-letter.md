@@ -12,7 +12,6 @@ status: accepted
 <div class="doc-meta">
 <span class="status-pill status-superseded"><span class="status-dot"></span>Accepted</span>
 <span>2026-07-13</span>
-<span class="doc-meta-faint">deciders: me (proposing)</span>
 </div>
 
 ### Context
@@ -20,6 +19,9 @@ status: accepted
 The system uses a transactional outbox pattern so that writes to an external ERP system (device association, subscription changes, billing updates) aren't issued inline during the user's HTTP request. Instead, the local read-model update and an outbox row are committed in a single database transaction. A background dispatcher polls the outbox for pending rows and delivers them to the ERP independently — giving the user a fast response based only on the local database while the ERP call happens out-of-band with its own retry logic.
 
 The dispatcher's failure-handling path had a gap: on any error from the ERP API, the outbox entry jumped straight to a terminal `Failed` status with no retry cycle. The entry needed a proper lifecycle — retry with backoff while attempts remain, dead-letter when exhausted.
+
+**Two-layer resilience:** 
+Polly operates at the per-HTTP-call level (milliseconds-to-seconds scope, invisible to the caller) — it absorbs brief transport blips within a single dispatch attempt. The outbox's own retry/backoff/dead-letter state machine operates at the application level (minutes-to-hours scope, spanning separate dispatcher invocations, tracked via attempt count and next-retry timestamps in the database). Both layers are needed together: Polly handles transient network noise; the outbox handles sustained ERP outages. They are architecturally distinct despite both being "retry" — conflating them would either over-retry at the wrong timescale or under-protect at the other.
 
 Separately, the outbox already had an idempotency key with a unique constraint to prevent duplicate rows (the same ERP write submitted twice due to a client retry), but the repository's insert method had no collision handling. A constraint violation would surface as an unhandled exception rather than a benign no-op.
 
@@ -75,4 +77,4 @@ Supporting decisions made alongside this:
 > Full jitter allows occasional near-instant retries (`random(0, cap)` can return values close to zero). Accepted because ERP dispatch failures are cheap — single HTTP call, no held resources. Eager config binding means no live-reload — changing retry coefficients requires a restart. Fake-exception testing doesn't prove the unique index exists in the schema — that verification belongs to the migration layer.
 
 > [!consequence-revisit] Revisit triggers
-> If operational experience shows that retry coefficients need hot-tuning during active incidents (not just between restarts), migrate to `IOptionsMonitor<T>`. If the dispatcher's coupling to the API's instance count causes concurrency issues (multiple dispatchers racing on the same rows despite locking), extract to a standalone worker with an explicit single-instance lease. Observability instrumentation (queue depth, dispatch lag, absence-of-work detection) is a separate follow-on.
+> Tune resilience coefficients once real ERP latency and failure data is available — the current defaults are borrowed, not derived. If operational experience shows that retry coefficients need hot-tuning during active incidents (not just between restarts), migrate to `IOptionsMonitor<T>`. If the dispatcher's coupling to the API's instance count causes concurrency issues (multiple dispatchers racing on the same rows despite locking), extract to a standalone worker with an explicit single-instance lease. Observability instrumentation (queue depth, dispatch lag, absence-of-work detection) is a separate follow-on.

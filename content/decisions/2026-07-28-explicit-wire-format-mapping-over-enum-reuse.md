@@ -12,7 +12,7 @@ status: accepted
 <div class="doc-meta">
 <span class="status-pill status-superseded"><span class="status-dot"></span>Accepted</span>
 <span>2026-07-28</span>
-<span class="doc-meta-faint">deciders: me (proposing)</span>
+<span class="doc-meta-faint">deciders: me</span>
 </div>
 
 ### Context
