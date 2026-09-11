@@ -40,7 +40,7 @@ A record of load-bearing decisions I've made and hard problems I've reasoned thr
 
 ## On practice
 
-<p class="sec-sub">How I document, and why. Supporting evidence — not the headline.</p>
+<p class="sec-sub">Teardowns of real systems and invented design problems.</p>
 </div>
 
 <div id="cards-practice"></div>
