@@ -18,13 +18,6 @@ facts:
     label: "rows in concurrent claim verification"
   - value: "2"
     label: "independent repository instances tested"
-evidence:
-  - kind: "Integration test"
-    title: "Verify concurrent claims against SQL Server"
-    summary: "Two repository instances claim from the same pending set and assert that their batches never overlap."
-  - kind: "Implementation boundary"
-    title: "Keep producer transactions behind a unit-of-work seam"
-    summary: "Business services commit their write and outbox entry atomically without depending directly on the ORM context."
 ---
 
 The system needed to deliver business writes to an external ERP without losing a locally committed change or creating the external side effect twice. The ERP call was asynchronous, fallible, and—once it created a billable contract—not safely reversible.
@@ -34,6 +27,11 @@ That constraint shaped the complete delivery path: stage an outbox entry in the 
 ## Quick summary
 
 I implemented the background dispatcher and the transaction seam used by its first producer. I also worked through the related retry state machine, typed HTTP-client result contract, claim-locking tradeoff, and pre-send guard. The design was reviewed with the team architect and revised when implementation and testing exposed costs the first proposal had understated.
+
+> [!artifacts] Artifacts in this case study
+>
+> - [Atomic producer boundary: business write and outbox entry](#artifact-atomic-producer-boundary)
+> - [Concurrent-claim integration test: two repositories, same pending set](#artifact-concurrent-claim-integration-test)
 
 ## Context and constraints
 
@@ -46,6 +44,23 @@ I implemented the background dispatcher and the transaction seam used by its fir
 ## Implementation
 
 The producer executes its business write and outbox insert through an `IUnitOfWork` transaction seam. Once the transaction commits, it signals a `BackgroundService` dispatcher, with scheduled polling as a fallback.
+
+### Artifact: Atomic producer boundary
+
+_Sanitized implementation shape; domain names have been generalized._
+
+```csharp
+await unitOfWork.ExecuteAsync(async cancellationToken =>
+{
+    await subscriptions.SaveAsync(subscription, cancellationToken);
+    await outbox.EnqueueAsync(message, cancellationToken);
+}, cancellationToken);
+```
+
+> [!artifact-note] Reading the artifact
+> **Establishes:** The producer expresses the business write and outbox insert inside one transaction boundary, without coupling the application service directly to the ORM context.
+>
+> **Does not prove:** The excerpt alone does not verify database atomicity, rollback behavior, or that every producer uses the seam correctly.
 
 The dispatcher routes each entry through a typed ERP client. That client returns an actionable classification instead of requiring callers to interpret transport details. Permanent failures dead-letter immediately; transient failures use bounded backoff; successful responses carry the identifiers needed by local persistence.
 
@@ -60,6 +75,27 @@ After review, the implementation returned to the simpler ORM query under seriali
 ## Validation and limits
 
 The real-database integration test runs two independent repository instances against the same 20 eligible rows and verifies that the claimed batches do not overlap. That establishes concurrent claim separation for the modeled scenario. It does not establish sustained-throughput behavior, a deadlock rate under production contention, or the correctness of every ERP failure classification.
+
+### Artifact: Concurrent-claim integration test
+
+_Sanitized excerpt; setup and cleanup are omitted._
+
+```csharp
+var claims = await Task.WhenAll(
+    repositoryOne.ClaimPendingAsync(batchSize: 10, cancellationToken),
+    repositoryTwo.ClaimPendingAsync(batchSize: 10, cancellationToken));
+
+var firstBatchIds = claims[0].Select(entry => entry.Id).ToHashSet();
+var secondBatchIds = claims[1].Select(entry => entry.Id).ToHashSet();
+
+Assert.Empty(firstBatchIds.Intersect(secondBatchIds));
+Assert.Equal(20, firstBatchIds.Union(secondBatchIds).Count());
+```
+
+> [!artifact-note] Reading the artifact
+> **Establishes:** Against SQL Server, two independent repository instances can claim the same eligible set concurrently without receiving overlapping rows in this 20-row scenario.
+>
+> **Does not prove:** It is not a throughput benchmark and does not establish the production deadlock rate, fairness across workers, or behavior under every isolation and failure condition.
 
 The remaining operational questions are explicit: measure queue age and claim failures, reconcile any successful ERP response whose local persistence fails, and revisit the locking strategy when observed contention—not architectural preference—justifies the additional complexity.
 

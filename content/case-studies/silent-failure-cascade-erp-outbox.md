@@ -18,13 +18,6 @@ facts:
     label: "containment boundaries traced"
   - value: "1 / entry"
     label: "ORM scope after isolation"
-evidence:
-  - kind: "Incident analysis"
-    title: "Follow the failure across four boundaries"
-    summary: "A boundary diagram and timeline show why each locally valid fix left a wider propagation path unchecked."
-  - kind: "Failure containment"
-    title: "Separate entry state from batch state"
-    summary: "Per-entry dependency scopes prevent one failed change tracker from contaminating the next dispatch."
 ---
 
 <p class="eyebrow">Case study · Distributed systems</p>
@@ -37,6 +30,13 @@ evidence:
 A production incident created a second, genuinely separate billable contract in an external ERP for a subscription that already had one. Four independent decisions — each correct when it was made — chained together to produce it.
 
 What makes this worth writing up isn't the bug. It's that I fixed it four times. Each fix addressed a real mechanism and each one left me believing the failure was contained. Each time, the blast radius extended one boundary further than I'd checked. The pattern in my own reasoning turned out to be more useful than any individual fix.
+
+> [!artifacts] Artifacts in this case study
+>
+> - [Boundary diagram: four propagation layers](#artifact-boundary-diagram-four-propagation-layers)
+> - [Containment map: entry state versus batch state](#artifact-containment-map-entry-state-versus-batch-state)
+
+### Artifact: Boundary diagram: four propagation layers
 
 <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Nested scope boundaries showing a failure escaping four successive containment assumptions">
   <defs>
@@ -68,6 +68,11 @@ What makes this worth writing up isn't the bug. It's that I fixed it four times.
 
 <text x="36" y="370" font-family="ui-monospace, monospace" font-size="11" fill="#8a6b5a">each fix contained one boundary — the failure escaped the next one out</text>
 </svg>
+
+> [!artifact-note] Reading the artifact
+> **Establishes:** The same constraint violation crossed four distinct containment assumptions: persistence handling, entry processing, the shared ORM context, and the batch loop.
+>
+> **Does not prove:** The diagram shows the reconstructed propagation path, not timing, frequency, or the relative production impact of each layer.
 
 ## The system
 
@@ -132,6 +137,20 @@ The fix: each entry in the batch gets its own DI scope, and therefore its own OR
 But even with per-entry scoping, the batch _loop itself_ had no containment. An unhandled exception from one entry's processing — any exception that escaped the entry's own internal error handling — propagated out of the loop, aborting every remaining entry in the batch. Those entries waited until the next poll cycle to be reclaimed, with no record of why they were delayed.
 
 The final fix: the batch loop wraps each entry's dispatch in a try/catch (excluding cancellation, which should propagate to stop the loop cleanly). An unhandled exception from one entry is logged, and the loop continues to the next. This is a last-resort containment net — entries caught here aren't marked failed (the DI scope that failed can't be trusted for that write), so they rely on lock expiry for reclaim rather than immediate bookkeeping.
+
+### Artifact: Containment map: entry state versus batch state
+
+| Boundary                | Before                                                    | After                                                         |
+| ----------------------- | --------------------------------------------------------- | ------------------------------------------------------------- |
+| ORM context             | One change tracker was shared across the claimed batch.   | Each entry resolves a fresh context from its own DI scope.    |
+| Recovery write          | Retried local persistence through the failed entry scope. | Uses an independent scope that cannot see the dirty entity.   |
+| Batch loop              | One escaped exception aborted every later entry.          | Each dispatch is contained while cancellation still escapes.  |
+| Last-resort bookkeeping | A failed scope could be reused to record its own failure. | Lock expiry reclaims work when the failed scope is untrusted. |
+
+> [!artifact-note] Reading the artifact
+> **Establishes:** The implemented boundaries separate an entry's mutable state from both recovery work and subsequent entries in the batch.
+>
+> **Does not prove:** The map does not show that every exception is recoverable, that delayed entries are immediately visible, or that lock-expiry recovery meets an operational latency target.
 
 ## What I learned
 

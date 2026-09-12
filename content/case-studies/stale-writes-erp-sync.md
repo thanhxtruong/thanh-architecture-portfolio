@@ -18,10 +18,6 @@ facts:
     label: "root causes separated"
   - value: "1"
     label: "monotonic version invariant"
-evidence:
-  - kind: "Failure model"
-    title: "Three similar symptoms, three different controls"
-    summary: "Scenario traces distinguish stale arrival, obsolete retries, and genuine concurrent intent."
 ---
 
 <p class="eyebrow">Case study · Distributed systems</p>
@@ -34,6 +30,12 @@ evidence:
 We keep an internal copy of records that originate in an external ERP. Changes flow out as events and land through an **outbox** on our side, so a user action and its propagation are decoupled. The ERP stamps every record with a monotonically increasing **version number** (the OVN) — the only trustworthy signal for "which version is newer," since timestamps across two systems and a bus can't be trusted for ordering.
 
 The goal: **never regress to an older version than one we've already seen**, no matter how events and writes interleave. "Last write wins" is a bug here, because "last to arrive" isn't "last in truth." There turned out to be three distinct ways a stale write could sneak in — each needing its own control.
+
+> [!artifacts] Artifacts in this case study
+>
+> - [Failure model: three similar symptoms, three different controls](#artifact-failure-model-three-similar-symptoms-three-different-controls)
+
+### Artifact: Failure model: three similar symptoms, three different controls
 
 > [!scenario] An inbound event overtakes a queued write
 > **Root cause: arrival ordering**
@@ -58,3 +60,8 @@ The goal: **never regress to an older version than one we've already seen**, no 
 >
 > > [!control] Control — optimistic concurrency at edit time
 > > Reject the second save back to the user on the stale snapshot, with reload-and-reapply, so the conflict surfaces to a human instead of being resolved by silent last-write-wins. Recognizing that an identical symptom had two unrelated causes is the architectural point — conflating them would have shipped a control that quietly discarded real edits.
+
+> [!artifact-note] Reading the artifact
+> **Establishes:** The scenario traces separate arrival ordering, retry reordering, and concurrent user intent, and connect each problem class to a different control.
+>
+> **Does not prove:** The model does not quantify event lag or contention, validate a specific database implementation, or eliminate the need to test each interleaving against the real persistence layer.

@@ -16,15 +16,15 @@ demonstrates: "<the hiring evidence this case provides>"
 facts:
   - value: "<short value>"
     label: "<precise, supportable label>"
-evidence:
-  - kind: "<Implementation | Test | Investigation | Delivery>"
-    title: "<artifact title>"
-    summary: "<what it establishes and, when useful, what it does not>"
 ---
 
 ## Quick summary
 
 <!-- Problem, your contribution, and the verified result or current status. -->
+
+> [!artifacts] Artifacts in this case study
+>
+> - [Artifact title](#artifact-title)
 
 ## Context and constraints
 
@@ -41,6 +41,15 @@ evidence:
 ## Implementation
 
 <!-- Explain the consequential code-level choices. Use sanitized excerpts or labeled reconstructions. -->
+
+### Artifact: Artifact title
+
+<!-- Place the diagram, excerpt, test, trace, or table here, immediately after the paragraph that explains why it matters. -->
+
+> [!artifact-note] Reading the artifact
+> **Establishes:** <the specific claim this artifact supports>
+>
+> **Does not prove:** <the important limit, unknown, or adjacent claim it cannot support>
 
 ## Validation and delivery
 
