@@ -165,9 +165,6 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles, tree }: QuartzComp
             </a>
             <a href="#evidence">Inspect the evidence</a>
           </div>
-          <p class="portfolio-hero-note">
-            Code-level decisions, failure analysis, tests, production lessons, and honest limits.
-          </p>
         </div>
         <aside class="portfolio-profile" aria-label="Professional profile">
           <p class="portfolio-eyebrow">The short version / 30 seconds</p>
@@ -188,15 +185,15 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles, tree }: QuartzComp
       <div class="portfolio-credibility" aria-label="Engineering strengths">
         <div>
           <strong>Build &amp; deliver</strong>
-          <span>Maintainable implementation, tested and shipped</span>
+          <span>Features built, tested against real dependencies, and shipped</span>
         </div>
         <div>
           <strong>Investigate &amp; improve</strong>
-          <span>Evidence-led debugging and production care</span>
+          <span>Production failures traced to root cause and contained</span>
         </div>
         <div>
           <strong>Design &amp; guide</strong>
-          <span>Sound tradeoffs connected to delivery</span>
+          <span>Options compared, costs named, decisions documented</span>
         </div>
       </div>
 
