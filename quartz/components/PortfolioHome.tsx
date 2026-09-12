@@ -159,26 +159,6 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles, tree }: QuartzComp
             <em>{text(fm.headline_accent, "See it through.")}</em>
           </h1>
           <p class="portfolio-intro">{text(fm.intro)}</p>
-          <nav class="portfolio-credibility" aria-label="Explore portfolio sections">
-            <a href="#work" aria-label="Build and deliver: go to Selected Work">
-              <strong>
-                Build &amp; deliver <span aria-hidden="true">↓</span>
-              </strong>
-              <span>Features built, tested against real dependencies, and shipped</span>
-            </a>
-            <a href="#evidence" aria-label="Investigate and improve: go to Engineering Evidence">
-              <strong>
-                Investigate &amp; improve <span aria-hidden="true">↓</span>
-              </strong>
-              <span>Production failures traced to root cause and contained</span>
-            </a>
-            <a href="#decisions" aria-label="Design and guide: go to Decision Records">
-              <strong>
-                Design &amp; guide <span aria-hidden="true">↓</span>
-              </strong>
-              <span>Options compared, costs named, decisions documented</span>
-            </a>
-          </nav>
         </div>
         <aside class="portfolio-profile" aria-label="Professional profile">
           <p class="portfolio-eyebrow">The short version / 30 seconds</p>
@@ -195,6 +175,27 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles, tree }: QuartzComp
           <p class="portfolio-status">Open to Senior Software Engineer opportunities</p>
         </aside>
       </section>
+
+      <nav class="portfolio-credibility" aria-label="Explore portfolio sections">
+        <a href="#work" aria-label="Build and deliver: go to Selected Work">
+          <strong>
+            Build &amp; deliver <span aria-hidden="true">↓</span>
+          </strong>
+          <span>Features built, tested against real dependencies, and shipped</span>
+        </a>
+        <a href="#evidence" aria-label="Investigate and improve: go to Engineering Evidence">
+          <strong>
+            Investigate &amp; improve <span aria-hidden="true">↓</span>
+          </strong>
+          <span>Production failures traced to root cause and contained</span>
+        </a>
+        <a href="#decisions" aria-label="Design and guide: go to Decision Records">
+          <strong>
+            Design &amp; guide <span aria-hidden="true">↓</span>
+          </strong>
+          <span>Options compared, costs named, decisions documented</span>
+        </a>
+      </nav>
 
       <section id="work" class="portfolio-section">
         <div class="portfolio-section-heading">
