@@ -38,7 +38,7 @@ What makes this worth writing up isn't the bug. It's that I fixed it four times.
 
 ### Artifact: Boundary diagram: four propagation layers
 
-<svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Nested scope boundaries showing a failure escaping four successive containment assumptions">
+<svg class="artifact-diagram" viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Nested scope boundaries showing a failure escaping four successive containment assumptions">
   <defs>
     <marker id="leak" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
       <path d="M0,0 L8,4 L0,8 z" fill="#b4533a"/>

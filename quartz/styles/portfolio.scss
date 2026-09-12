@@ -109,17 +109,18 @@ pre {
 }
 
 .center.full-width .page-header {
-  position: sticky;
-  z-index: 20;
-  top: 0;
+  display: contents;
   margin: 0;
-  border-bottom: 1px solid var(--portfolio-line);
-  background: rgb(246 244 238 / 96%);
-  backdrop-filter: blur(12px);
 
   > header {
     display: block;
+    position: sticky;
+    z-index: 20;
+    top: 0;
     margin: 0;
+    border-bottom: 1px solid var(--portfolio-line);
+    background: rgb(246 244 238 / 96%);
+    backdrop-filter: blur(12px);
   }
 
   > .popover-hint:not(:empty) {
@@ -962,7 +963,7 @@ article:not(.portfolio-home) {
     border-top: 1px solid var(--portfolio-ink);
   }
 
-  svg {
+  svg.artifact-diagram {
     display: block;
     width: 100%;
     height: auto;
