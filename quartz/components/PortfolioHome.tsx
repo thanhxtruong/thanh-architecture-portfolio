@@ -93,17 +93,21 @@ function ProjectCard({
   file,
   current,
   featured = false,
+  wide = false,
 }: {
   file: QuartzPluginData
   current: FullSlug
   featured?: boolean
+  wide?: boolean
 }) {
   const fm = frontmatter(file)
   const href = resolveRelative(current, file.slug as FullSlug)
   const facts = records<Fact>(fm.facts)
 
   return (
-    <article class={`portfolio-case${featured ? " portfolio-case-featured" : ""}`}>
+    <article
+      class={`portfolio-case${featured ? " portfolio-case-featured" : ""}${wide ? " portfolio-case-wide" : ""}`}
+    >
       <div class="portfolio-case-summary">
         <div class="portfolio-case-copy">
           <div class="portfolio-tagline">
@@ -138,15 +142,15 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles, tree }: QuartzComp
   const fm = frontmatter(fileData)
   const current = fileData.slug ?? ("index" as FullSlug)
   const projects = projectFiles(allFiles)
-  const [featuredProject, ...supportingProjects] = projects
-  const decisions = decisionFiles(allFiles)
-  const approach = records<ApproachStep>(fm.approach)
-  const investigationProject = projects.find(
+  const investigationProjects = projects.filter(
     (file) => text(frontmatter(file).focus) === "Investigate & improve",
   )
-  const investigationHref = investigationProject?.slug
-    ? resolveRelative(current, investigationProject.slug)
-    : "#work"
+  const selectedProjects = projects.filter(
+    (file) => text(frontmatter(file).focus) !== "Investigate & improve",
+  )
+  const [featuredProject, ...supportingProjects] = selectedProjects
+  const decisions = decisionFiles(allFiles)
+  const approach = records<ApproachStep>(fm.approach)
 
   return (
     <article class="portfolio-home" id="top">
@@ -185,10 +189,7 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles, tree }: QuartzComp
           </strong>
           <span>Features built, tested against real dependencies, and shipped</span>
         </a>
-        <a
-          href={investigationHref}
-          aria-label="Investigate and improve: read the investigation case"
-        >
+        <a href="#investigations" aria-label="Investigate and improve: go to System Investigations">
           <strong>
             Investigate &amp; improve <span aria-hidden="true">↓</span>
           </strong>
@@ -205,7 +206,7 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles, tree }: QuartzComp
       <section id="work" class="portfolio-section">
         <div class="portfolio-section-heading">
           <div>
-            <p class="portfolio-eyebrow">01 / What I shipped</p>
+            <p class="portfolio-eyebrow">01 / Selected work</p>
             <h2>Problems solved, start to finish</h2>
           </div>
           <p>What I built, how I tested it, and the tradeoffs.</p>
@@ -218,10 +219,25 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles, tree }: QuartzComp
         </div>
       </section>
 
+      <section id="investigations" class="portfolio-section">
+        <div class="portfolio-section-heading">
+          <div>
+            <p class="portfolio-eyebrow">02 / System investigations</p>
+            <h2>Failures traced through the system.</h2>
+          </div>
+          <p>The symptom, the path through the system, and the root cause.</p>
+        </div>
+        <div class="portfolio-investigation-list">
+          {investigationProjects.map((project) => (
+            <ProjectCard file={project} current={current} wide />
+          ))}
+        </div>
+      </section>
+
       <section id="decisions" class="portfolio-section">
         <div class="portfolio-section-heading">
           <div>
-            <p class="portfolio-eyebrow">02 / Decision records</p>
+            <p class="portfolio-eyebrow">03 / Decision records</p>
             <h2>The reasoning behind the code.</h2>
           </div>
           <p>What was accepted, what it cost, and what evidence would make the decision change.</p>
@@ -254,7 +270,7 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles, tree }: QuartzComp
 
       <section id="approach" class="portfolio-method">
         <div>
-          <p class="portfolio-eyebrow">03 / How I work</p>
+          <p class="portfolio-eyebrow">04 / How I work</p>
           <h2>
             Understand it.
             <br />
@@ -277,7 +293,7 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles, tree }: QuartzComp
       </section>
 
       <section id="about" class="portfolio-about portfolio-section">
-        <p class="portfolio-eyebrow">04 / About &amp; collaboration</p>
+        <p class="portfolio-eyebrow">05 / About &amp; collaboration</p>
         <div class="portfolio-authored">
           {htmlToJsx((fileData.filePath ?? "content/index.md") as FilePath, tree)}
         </div>

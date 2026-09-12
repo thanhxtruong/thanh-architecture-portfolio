@@ -593,6 +593,16 @@ pre {
   }
 }
 
+.portfolio-investigation-list {
+  .portfolio-case-wide .portfolio-case-summary {
+    display: block;
+  }
+
+  .portfolio-case-wide .portfolio-case-copy {
+    max-width: 52rem;
+  }
+}
+
 summary {
   cursor: pointer;
 
