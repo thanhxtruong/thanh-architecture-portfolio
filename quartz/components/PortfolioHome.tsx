@@ -208,7 +208,7 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles, tree }: QuartzComp
             <p class="portfolio-eyebrow">01 / What I shipped</p>
             <h2>Problems solved, start to finish</h2>
           </div>
-          <p>What I built, how I tested it, and what the evidence does—and does not—establish.</p>
+          <p>What I built, how I tested it, and the tradeoffs.</p>
         </div>
         {featuredProject ? <ProjectCard file={featuredProject} current={current} featured /> : null}
         <div class="portfolio-case-grid">
