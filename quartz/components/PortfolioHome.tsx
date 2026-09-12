@@ -240,7 +240,7 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles, tree }: QuartzComp
             <p class="portfolio-eyebrow">03 / Decision records</p>
             <h2>The reasoning behind the code.</h2>
           </div>
-          <p>What was accepted, what it cost, and what evidence would make the decision change.</p>
+          <p>What was accepted, what it cost, and the assumptions that hold it.</p>
         </div>
         <div class="portfolio-decision-list">
           {decisions.map((file, index) => {
