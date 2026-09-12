@@ -245,35 +245,6 @@ pre {
   line-height: 1.8;
 }
 
-.portfolio-actions {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-
-  > a:not(.portfolio-button) {
-    font-size: 0.86rem;
-  }
-}
-
-.portfolio-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.4rem;
-  border: 1px solid var(--portfolio-ink);
-  background: var(--portfolio-ink);
-  color: var(--portfolio-paper);
-  padding: 0.8rem 1.25rem;
-  font-size: 0.83rem;
-  font-weight: 600;
-  text-decoration: none;
-
-  &:hover {
-    background: var(--portfolio-green);
-  }
-}
-
 .portfolio-hero-note {
   margin-top: 1.35rem;
   color: var(--portfolio-muted);
@@ -336,30 +307,57 @@ pre {
 .portfolio-credibility {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.75rem;
-  margin-bottom: 4.5rem;
-  padding: 1.45rem 0;
-  border-top: 1px solid var(--portfolio-line);
-  border-bottom: 1px solid var(--portfolio-line);
+  gap: 0.65rem;
+  margin: 1.8rem 0 0;
 
-  div + div {
-    padding-left: 1.9rem;
-    border-left: 1px solid var(--portfolio-line);
+  a {
+    display: flex;
+    min-width: 0;
+    min-height: 7.25rem;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+    border: 1px solid var(--portfolio-line);
+    background: var(--portfolio-white);
+    text-decoration: none;
+    transition:
+      background-color 160ms ease,
+      border-color 160ms ease,
+      transform 160ms ease;
+
+    &:hover {
+      border-color: var(--portfolio-ink);
+      background: var(--portfolio-soft);
+      transform: translateY(-2px);
+
+      > span {
+        text-decoration: underline;
+        text-decoration-color: var(--portfolio-accent);
+        text-underline-offset: 0.25rem;
+      }
+    }
   }
 
   strong,
-  span {
+  > a > span {
     display: block;
   }
 
   strong {
     margin-bottom: 0.25rem;
-    font: 1.55rem var(--portfolio-serif);
+    font: 1.08rem/1.25 var(--portfolio-serif);
+
+    span {
+      float: right;
+      color: var(--portfolio-accent);
+      font: 0.8rem var(--portfolio-mono);
+    }
   }
 
-  span {
+  > a > span {
     color: var(--portfolio-muted);
-    font-size: 0.78rem;
+    font-size: 0.74rem;
+    line-height: 1.45;
   }
 }
 
@@ -994,18 +992,6 @@ footer {
     margin-top: 2.5rem;
   }
 
-  .portfolio-credibility {
-    gap: 0.75rem;
-
-    div + div {
-      padding-left: 0.75rem;
-    }
-
-    strong {
-      font-size: 1.2rem;
-    }
-  }
-
   .portfolio-case-summary,
   .portfolio-case-grid,
   .portfolio-evidence-grid,
@@ -1063,10 +1049,9 @@ footer {
   .portfolio-credibility {
     grid-template-columns: 1fr;
 
-    div + div {
-      padding: 0.9rem 0 0;
-      border-top: 1px solid var(--portfolio-line);
-      border-left: 0;
+    a {
+      min-height: 0;
+      gap: 0.65rem;
     }
   }
 
@@ -1123,7 +1108,7 @@ footer {
 
 @media print {
   .page-header,
-  .portfolio-actions,
+  .portfolio-credibility,
   footer {
     display: none !important;
   }
