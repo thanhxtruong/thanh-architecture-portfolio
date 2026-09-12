@@ -1,107 +1,36 @@
 ---
-title: "Thanh — Architecture Portfolio"
+title: "Thanh — Senior Software Engineer"
 publish: true
+type: home
+description: "Senior Software Engineer portfolio focused on backend delivery, production reliability, and architectural judgment."
+eyebrow: "Backend engineering · Systems thinking · Delivery"
+headline: "Build it well."
+headline_accent: "See it through."
+intro: "I’m a Senior Software Engineer building reliable backend systems. I take work from understanding the problem through design, implementation, testing, and production support."
+profile_title: "Deep in the code. Mindful of the system."
+profile_summary: "I work where implementation details and system behavior meet: integrations, background processing, data consistency, and failure recovery."
+profile_focus: "Backend and distributed systems"
+profile_practice: "C# · SQL · APIs · automated tests"
+profile_evidence: "Code-level decisions · failure analysis · delivery lessons"
+approach:
+  - title: "Start with the outcome and constraints."
+    description: "Clarify the business need, unacceptable failures, and the limits the system actually has."
+  - title: "Build for the next engineer."
+    description: "Keep interfaces understandable, compare approaches, and record consequential tradeoffs."
+  - title: "Test the behavior that matters."
+    description: "Reproduce the failure and use real dependencies where their semantics determine correctness."
+  - title: "Follow it into production."
+    description: "Plan rollout and recovery, measure what can be measured, and change the design when evidence changes."
+contact_title: "What does your team need to build next?"
+contact_summary: "I’m interested in Senior Software Engineer opportunities with meaningful backend ownership, production responsibility, and room to contribute to system design."
+contact_label: "github.com/thanhxtruong"
+contact_url: "https://github.com/thanhxtruong"
 ---
 
-<p class="eyebrow">Portfolio · Software architecture</p>
+## I stay close to the work.
 
-# Decisions, and the *roads not taken.*
+I enjoy ambiguous engineering problems that require careful investigation, a maintainable implementation, and thoughtful production follow-through.
 
-A record of load-bearing decisions I've made and hard problems I've reasoned through in production systems — written to show **how I weigh tradeoffs**, not just what I shipped.
+My work includes backend services, external-system integrations, persistence and concurrency, automated testing, technical reviews, and operational problem solving. Architectural judgment appears here as part of delivery: defining boundaries, surfacing hidden assumptions, weighing tradeoffs, and revising a decision when new evidence changes the calculation.
 
----
-
-<div class="sec-head">
-<p class="sec-kicker"><b>01</b> — Decision records</p>
-
-## Decisions
-
-<p class="sec-sub">The load-bearing choices — why each was made, and what was rejected.</p>
-</div>
-
-<div id="cards-decisions"></div>
-
----
-
-<div class="sec-head">
-<p class="sec-kicker"><b>02</b> — Case studies</p>
-
-## Case studies
-
-<p class="sec-sub">Not "here's a decision" but "here's a problem I reasoned through," end to end.</p>
-</div>
-
-<div id="cards-case-studies"></div>
-
----
-
-<div class="sec-head">
-<p class="sec-kicker"><b>03</b> — On practice</p>
-
-## On practice
-
-<p class="sec-sub">Teardowns of real systems and invented design problems.</p>
-</div>
-
-<div id="cards-practice"></div>
-
-<script type="module">
-const STATUS_CLASS = {
-  accepted: "status-accepted",
-  superseded: "status-superseded",
-  deprecated: "status-deprecated",
-  proposed: "status-proposed",
-};
-
-function renderCard(entry) {
-  const slug = entry.slug;
-  const fileName = slug.split("/").pop() + ".md";
-  const a = document.createElement("a");
-  a.className = "portfolio-card";
-  a.setAttribute("href", slug);
-  a.dataset.slug = slug;
-
-  let metaHTML = "";
-  if (entry.status) {
-    const cls = STATUS_CLASS[entry.status] || "";
-    const label = entry.status.charAt(0).toUpperCase() + entry.status.slice(1);
-    metaHTML += `<span class="status-pill ${cls}"><span class="status-dot"></span>${label}</span><span class="sep">/</span>`;
-  }
-  if (entry.date) {
-    metaHTML += `<span>${entry.date}</span><span class="sep">/</span>`;
-  }
-  metaHTML += `<span class="card-filename">${fileName}</span>`;
-
-  a.innerHTML =
-    `<div class="card-meta">${metaHTML}</div>` +
-    `<div class="card-title">${entry.title}</div>` +
-    (entry.description ? `<p class="card-desc">${entry.description}</p>` : "");
-  return a;
-}
-
-async function populate() {
-  const url = new URL("static/portfolioIndex.json", document.baseURI).href;
-  let entries;
-  try {
-    const res = await fetch(url);
-    entries = await res.json();
-  } catch {
-    return;
-  }
-
-  const buckets = { decisions: [], "case-studies": [], practice: [] };
-  for (const e of entries) {
-    if (buckets[e.folder]) buckets[e.folder].push(e);
-  }
-
-  for (const [folder, items] of Object.entries(buckets)) {
-    const container = document.getElementById(`cards-${folder}`);
-    if (!container) continue;
-    container.innerHTML = "";
-    for (const item of items) container.appendChild(renderCard(item));
-  }
-}
-
-populate();
-document.addEventListener("nav", () => populate());
-</script>
+**Best fit:** a Senior Software Engineer role with ownership of substantial backend work and opportunities to improve both the system and the way the team reasons about it.

@@ -1,6 +1,6 @@
 ---
-title: Case studies
+title: Selected work
 publish: true
-description: "Not 'here is a decision' but 'here is a problem I reasoned through,' end to end."
+description: "Production engineering stories: the problem, investigation, implementation, validation, and outcome."
 tags: [case-study]
 ---

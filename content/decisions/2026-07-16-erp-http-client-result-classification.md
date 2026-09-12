@@ -1,16 +1,19 @@
 ---
 title: ERP HTTP Client — Result Classification for Retry-Aware Dispatch
 publish: true
+type: decision
 date: 2026-07-16
 description: Designing a typed HTTP client whose result type feeds directly into an outbox retry state machine — classifying ERP responses by application-level error code rather than HTTP status, distinguishing transient from permanent failures, and layering per-call resilience beneath application-level retry.
 tags: [adr]
 status: accepted
+decision_id: "ADR-016"
+related_project: "[[reliable-erp-outbox]]"
 ---
 
 <p class="eyebrow">Decision record</p>
 
 <div class="doc-meta">
-<span class="status-pill status-superseded"><span class="status-dot"></span>Accepted</span>
+<span class="status-pill status-accepted"><span class="status-dot"></span>Accepted</span>
 <span>2026-07-16</span>
 </div>
 
@@ -25,7 +28,7 @@ The codebase already had an established typed HTTP client for a different extern
 #### Result type
 
 > [!option-rejected] Bare boolean or null on failure
-> The existing partner API client returned `null` on any failure — adequate for a read-only lookup with no retry machinery behind it. Would have been the right choice if the caller didn't need to distinguish *why* a call failed, or if all failures warranted the same response (e.g., show an error message and let the user retry manually).
+> The existing partner API client returned `null` on any failure — adequate for a read-only lookup with no retry machinery behind it. Would have been the right choice if the caller didn't need to distinguish _why_ a call failed, or if all failures warranted the same response (e.g., show an error message and let the user retry manually).
 
 > [!option-chosen] Structured result with four-case outcome
 > Return a result object carrying one of four outcomes: `Success`, `SucceededPendingManualIntervention`, `TransientFailure`, `PermanentFailure`. The dispatcher needs this distinction to decide its next move — retry via outbox backoff (transient), dead-letter immediately without burning retry attempts (permanent), or mark delivered but flag for ops visibility (succeeded with caveats). Collapsing transient and permanent into one failure case would force either always-retrying permanently broken payloads through all max-retry attempts, or always-dead-lettering transient blips that would have self-resolved.

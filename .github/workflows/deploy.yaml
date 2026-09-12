@@ -44,9 +44,6 @@ jobs:
       - name: Build
         run: npx quartz build
 
-      - name: Generate portfolio index
-        run: node scripts/build-portfolio-index.mjs
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

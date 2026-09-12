@@ -1,16 +1,19 @@
 ---
 title: Outbox Dispatcher — Claim Locking Strategy, Atomic Producer Commits, and a Decision Reversed
 publish: true
+type: decision
 date: 2026-07-20
 description: Building the background dispatcher that drains a transactional outbox and delivers entries to an external ERP — choosing between skip-locked row claiming and serializable isolation, reversing the decision mid-implementation when the testability cost outweighed the concurrency benefit, and designing a unit-of-work seam so producers can commit atomically without coupling to the ORM.
 tags: [adr]
 status: accepted
+decision_id: "ADR-020"
+related_project: "[[reliable-erp-outbox]]"
 ---
 
 <p class="eyebrow">Decision record</p>
 
 <div class="doc-meta">
-<span class="status-pill status-superseded"><span class="status-dot"></span>Accepted</span>
+<span class="status-pill status-accepted"><span class="status-dot"></span>Accepted</span>
 <span>2026-07-20</span>
 </div>
 
@@ -39,7 +42,7 @@ Several design points surfaced during implementation that the prior planning had
 >
 > This is correct but wasteful under contention: each deadlock-killed claim wastes one poll interval. Accepted because the ORM-based query retains full provider portability, compile-time safety, and complete unit-test coverage via the in-memory provider — costs the team judged higher than occasional deadlock-driven retries at current load.
 
-*(Post-decision update: the deferred concurrent-locking verification gap was later closed. A containerized SQL Server test setup was added to the repo, and an integration test now runs two independent repository instances against a real database, concurrently claiming from the same 20 pending rows, asserting the batches never overlap. Both contexts enable retry-on-failure to mirror production, so a deadlock-losing caller retries automatically. This closed the testability gap that motivated the reversal — but the decision stands, since the simpler ORM query is sufficient at current load.)*
+_(Post-decision update: the deferred concurrent-locking verification gap was later closed. A containerized SQL Server test setup was added to the repo, and an integration test now runs two independent repository instances against a real database, concurrently claiming from the same 20 pending rows, asserting the batches never overlap. Both contexts enable retry-on-failure to mirror production, so a deadlock-losing caller retries automatically. This closed the testability gap that motivated the reversal — but the decision stands, since the simpler ORM query is sufficient at current load.)_
 
 #### Atomic producer commits
 
@@ -74,4 +77,4 @@ Build the dispatcher as a `BackgroundService` with the following design properti
 
 ### Decision reversal note
 
-The locking strategy reversal is documented here because the *process* of deciding, implementing, reconsidering, and reverting is part of the architectural judgment this ADR records. The skip-locked approach was technically correct and would have been the better choice in a codebase with integration-test infrastructure already in place. The reversal wasn't "we were wrong" — it was "the cost of this improvement, in this codebase at this moment, exceeds the benefit." The containerized test setup that later closed the testability gap means the tradeoff calculation has shifted — but the simpler query remains sufficient at current load, so the decision stands until evidence says otherwise.
+The locking strategy reversal is documented here because the _process_ of deciding, implementing, reconsidering, and reverting is part of the architectural judgment this ADR records. The skip-locked approach was technically correct and would have been the better choice in a codebase with integration-test infrastructure already in place. The reversal wasn't "we were wrong" — it was "the cost of this improvement, in this codebase at this moment, exceeds the benefit." The containerized test setup that later closed the testability gap means the tradeoff calculation has shifted — but the simpler query remains sufficient at current load, so the decision stands until evidence says otherwise.

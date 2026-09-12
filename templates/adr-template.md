@@ -1,10 +1,13 @@
 ---
 title: "<ADR title>"
 publish: false
+type: decision
 date: YYYY-MM-DD
 description: "<one sentence — used as the card preview>"
 tags: [adr]
 status: proposed
+decision_id: "ADR-000"
+related_project: "[[project-slug]]"
 supersedes: ""
 superseded-by: ""
 ---

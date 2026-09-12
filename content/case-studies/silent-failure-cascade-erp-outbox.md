@@ -1,9 +1,30 @@
 ---
 title: "Following a silent failure four levels deep"
 publish: true
+type: project
 date: 2026-08-22
 description: "Four fixes, each one assuming the failure was contained — and each one wrong about where the boundary actually was."
 tags: [case-study]
+featured: true
+featured_order: 1
+focus: "Investigate & improve"
+project_status: "Production investigation"
+period: "2026"
+summary: "Traced a duplicate-contract incident through timeout configuration, competing write paths, a poisoned ORM context, and a shared batch scope."
+my_contribution: "Investigated the cascading failure and implemented timeout, recovery-scope, per-entry-scope, and batch-containment changes."
+demonstrates: "evidence-led debugging, failure containment, and revising earlier assumptions"
+facts:
+  - value: "4"
+    label: "containment boundaries traced"
+  - value: "1 / entry"
+    label: "ORM scope after isolation"
+evidence:
+  - kind: "Incident analysis"
+    title: "Follow the failure across four boundaries"
+    summary: "A boundary diagram and timeline show why each locally valid fix left a wider propagation path unchecked."
+  - kind: "Failure containment"
+    title: "Separate entry state from batch state"
+    summary: "Per-entry dependency scopes prevent one failed change tracker from contaminating the next dispatch."
 ---
 
 <p class="eyebrow">Case study · Distributed systems</p>
@@ -45,7 +66,7 @@ What makes this worth writing up isn't the bug. It's that I fixed it four times.
   <path d="M616,120 L656,120 L656,98" fill="none" stroke="#b4533a" stroke-width="1.5" marker-end="url(#leak)" stroke-dasharray="4 3"/>
   <path d="M648,78 L672,78 L672,56" fill="none" stroke="#b4533a" stroke-width="1.5" marker-end="url(#leak)" stroke-dasharray="4 3"/>
 
-  <text x="36" y="370" font-family="ui-monospace, monospace" font-size="11" fill="#8a6b5a">each fix contained one boundary — the failure escaped the next one out</text>
+<text x="36" y="370" font-family="ui-monospace, monospace" font-size="11" fill="#8a6b5a">each fix contained one boundary — the failure escaped the next one out</text>
 </svg>
 
 ## The system
@@ -62,7 +83,7 @@ And a second, genuinely separate billable contract existed for the same subscrip
 
 ## The first explanation — and why it wasn't enough
 
-The outbox entry's error detail on its first dispatch attempt read: *"The operation didn't complete within the allowed timeout of 10 seconds."*
+The outbox entry's error detail on its first dispatch attempt read: _"The operation didn't complete within the allowed timeout of 10 seconds."_
 
 The ERP routinely takes up to 30 seconds to process a contract-creation call. The typed HTTP client was registered with a standard resilience handler that configures two timeouts: a total-request budget (bound to config, set comfortably high) and a per-attempt timeout. The per-attempt timeout was never bound to config. It silently defaulted to 10 seconds.
 
@@ -70,7 +91,7 @@ So the ERP succeeded after ~12 seconds, committed the contract, and returned a r
 
 My first reaction was that this was the fix: configure the per-attempt timeout explicitly, sized above 30 seconds, and the false timeout stops firing. I wrote the config change and considered the investigation closed.
 
-It wasn't. The timeout explained why the *first* attempt was misclassified, but it didn't explain why the retry — which succeeded and returned real identifiers — still left the record at `NULL`. If the retry worked, the identifiers should have been persisted. Something else was eating the successful response.
+It wasn't. The timeout explained why the _first_ attempt was misclassified, but it didn't explain why the retry — which succeeded and returned real identifiers — still left the record at `NULL`. If the retry worked, the identifiers should have been persisted. Something else was eating the successful response.
 
 ## The second layer — a race nobody was arbitrating
 
@@ -84,7 +105,7 @@ This was caught by design — an earlier architectural decision (the [idempotenc
 
 I'd designed that catch block. It was doing exactly what I'd intended. But "caught by design" in this context meant "silently permanent" — the only evidence was a log line that would age out of retention. No alert, no retry of the local write, no queryable state.
 
-This was the moment the investigation shifted from "find the bug" to "question the previous fix." The swallowed exception wasn't wrong in isolation — it was the correct response to the constraint it was designed under. But the constraint had assumed the persistence failure would be *transient* (a deadlock, a timeout), not *structural* (a duplicate record that wouldn't resolve on its own).
+This was the moment the investigation shifted from "find the bug" to "question the previous fix." The swallowed exception wasn't wrong in isolation — it was the correct response to the constraint it was designed under. But the constraint had assumed the persistence failure would be _transient_ (a deadlock, a timeout), not _structural_ (a duplicate record that wouldn't resolve on its own).
 
 ## The third layer — poison in the ORM context
 
@@ -92,7 +113,7 @@ A related but distinct incident surfaced during integration testing: two genuine
 
 The investigation traced back to the same constraint violation, but with a different downstream effect. The unique-constraint exception left the ORM's change tracker holding a dirty entity — the record it tried to update, still marked as `Modified` with the conflicting identifiers. The recovery write — designed to stash the ERP's response for a later retry of just the local save — reused the **same ORM context**.
 
-When the recovery write called `SaveChangesAsync`, the ORM re-flushed *all* tracked changes, including the dirty entity from the failed save. The identical constraint violation fired again. But this time it threw inside a `catch` block — the recovery path itself failed with the same exception it was trying to recover from.
+When the recovery write called `SaveChangesAsync`, the ORM re-flushed _all_ tracked changes, including the dirty entity from the failed save. The identical constraint violation fired again. But this time it threw inside a `catch` block — the recovery path itself failed with the same exception it was trying to recover from.
 
 The unhandled exception propagated out of the recovery method, past the dispatcher's outer error handling (which also reused the same context), and out to the top-level loop. No failure state was recorded on the outbox entry — no status change, no error detail, no pending-contract stash. The entry's processing lock expired, it was reclaimed by a later poll cycle, and redispatched as if nothing had happened. The pre-send idempotency guard checked the local record, found `NULL` identifiers, concluded no contract existed, and called the ERP. The ERP created a second contract.
 
@@ -102,25 +123,25 @@ The fix was straightforward once the mechanism was clear: the recovery write cre
 
 It wasn't closed. The fresh-scope fix isolated the recovery write from its own entry's poison. But I'd only followed the contamination one hop. The actual scope boundary was wider.
 
-The dispatcher processed entries in batches. One ORM context was shared across the entire batch — not one per entry, one per *batch*. Entry N's failed `SaveChangesAsync` left a dirty entity on the context. Entry N+1 resolved its own, completely unrelated repository from the same context. When N+1 called `SaveChangesAsync` for its own legitimate write, the ORM re-flushed N's dirty entity alongside it. A failure in one entry silently corrupted the next.
+The dispatcher processed entries in batches. One ORM context was shared across the entire batch — not one per entry, one per _batch_. Entry N's failed `SaveChangesAsync` left a dirty entity on the context. Entry N+1 resolved its own, completely unrelated repository from the same context. When N+1 called `SaveChangesAsync` for its own legitimate write, the ORM re-flushed N's dirty entity alongside it. A failure in one entry silently corrupted the next.
 
 This is an ORM anti-pattern with a name: the context is designed as a short-lived unit of work — created, used for one logical operation, and disposed. Using it across a batch of unrelated operations turns it into a captive dependency whose change tracker grows unbounded and whose failure state leaks across boundaries.
 
 The fix: each entry in the batch gets its own DI scope, and therefore its own ORM context. A failure in entry N's change tracker can no longer contaminate entry N+1.
 
-But even with per-entry scoping, the batch *loop itself* had no containment. An unhandled exception from one entry's processing — any exception that escaped the entry's own internal error handling — propagated out of the loop, aborting every remaining entry in the batch. Those entries waited until the next poll cycle to be reclaimed, with no record of why they were delayed.
+But even with per-entry scoping, the batch _loop itself_ had no containment. An unhandled exception from one entry's processing — any exception that escaped the entry's own internal error handling — propagated out of the loop, aborting every remaining entry in the batch. Those entries waited until the next poll cycle to be reclaimed, with no record of why they were delayed.
 
 The final fix: the batch loop wraps each entry's dispatch in a try/catch (excluding cancellation, which should propagate to stop the loop cleanly). An unhandled exception from one entry is logged, and the loop continues to the next. This is a last-resort containment net — entries caught here aren't marked failed (the DI scope that failed can't be trusted for that write), so they rely on lock expiry for reclaim rather than immediate bookkeeping.
 
 ## What I learned
 
-| What I fixed | What I assumed was contained | What actually wasn't |
-|---|---|---|
-| The false timeout | The retry would handle it | The retry's persistence was silently swallowed |
-| The silent swallow | The exception was safely caught | The catch reused a poisoned ORM context |
-| The poisoned recovery write | The entry's failure was isolated | The ORM context was shared across the batch |
-| The shared batch context | Each entry was independent | The loop itself had no containment |
+| What I fixed                | What I assumed was contained     | What actually wasn't                           |
+| --------------------------- | -------------------------------- | ---------------------------------------------- |
+| The false timeout           | The retry would handle it        | The retry's persistence was silently swallowed |
+| The silent swallow          | The exception was safely caught  | The catch reused a poisoned ORM context        |
+| The poisoned recovery write | The entry's failure was isolated | The ORM context was shared across the batch    |
+| The shared batch context    | Each entry was independent       | The loop itself had no containment             |
 
-The pattern is always the same: fix the immediate mechanism, then ask *what scope does this failure actually reach?* Every time I assumed the blast radius stopped at the boundary I could see, there was another boundary I hadn't checked.
+The pattern is always the same: fix the immediate mechanism, then ask _what scope does this failure actually reach?_ Every time I assumed the blast radius stopped at the boundary I could see, there was another boundary I hadn't checked.
 
 The second lesson is about "correct in isolation" versus "correct in composition." The 10-second timeout default was reasonable. The event consumer creating a shell record was correct given what it could see. The swallowed exception was a deliberately reasoned decision to prevent a worse outcome. The shared ORM context matched the pattern used everywhere else in the codebase. None of these were bugs. The bug was their interaction — and each needed its own fix because each was an independently-closeable link in a chain.

@@ -1,16 +1,19 @@
 ---
 title: Outbox Retry, Backoff, and Dead-Letter State Machine for ERP Write Delivery
 publish: true
+type: decision
 date: 2026-07-13
 description: Designing the retry lifecycle for a transactional outbox that delivers writes to an external ERP system — exponential backoff with full jitter, dead-lettering on exhaustion, and idempotency-collision handling — choosing between jitter strategies based on whether a failed attempt is cheap or expensive for the downstream.
 tags: [adr]
 status: accepted
+decision_id: "ADR-013"
+related_project: "[[reliable-erp-outbox]]"
 ---
 
 <p class="eyebrow">Decision record</p>
 
 <div class="doc-meta">
-<span class="status-pill status-superseded"><span class="status-dot"></span>Accepted</span>
+<span class="status-pill status-accepted"><span class="status-dot"></span>Accepted</span>
 <span>2026-07-13</span>
 </div>
 
@@ -20,7 +23,7 @@ The system uses a transactional outbox pattern so that writes to an external ERP
 
 The dispatcher's failure-handling path had a gap: on any error from the ERP API, the outbox entry jumped straight to a terminal `Failed` status with no retry cycle. The entry needed a proper lifecycle — retry with backoff while attempts remain, dead-letter when exhausted.
 
-**Two-layer resilience:** 
+**Two-layer resilience:**
 Polly operates at the per-HTTP-call level (milliseconds-to-seconds scope, invisible to the caller) — it absorbs brief transport blips within a single dispatch attempt. The outbox's own retry/backoff/dead-letter state machine operates at the application level (minutes-to-hours scope, spanning separate dispatcher invocations, tracked via attempt count and next-retry timestamps in the database). Both layers are needed together: Polly handles transient network noise; the outbox handles sustained ERP outages. They are architecturally distinct despite both being "retry" — conflating them would either over-retry at the wrong timescale or under-protect at the other.
 
 Separately, the outbox already had an idempotency key with a unique constraint to prevent duplicate rows (the same ERP write submitted twice due to a client retry), but the repository's insert method had no collision handling. A constraint violation would surface as an unhandled exception rather than a benign no-op.

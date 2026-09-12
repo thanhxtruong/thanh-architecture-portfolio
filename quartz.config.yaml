@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=./quartz/plugins/quartz-plugins.schema.json
 configuration:
-  pageTitle: "Thanh — Architecture Portfolio"
+  pageTitle: "Thanh — Senior Software Engineer"
   pageTitleSuffix: ""
   enableSPA: true
   enablePopovers: true
@@ -12,41 +12,34 @@ configuration:
     - templates
     - .obsidian
   theme:
-    fontOrigin: googleFonts
+    fontOrigin: local
     cdnCaching: true
     typography:
-      header:
-        name: Spectral
-        weights: [300, 400, 500, 600, 700, 800]
-        includeItalic: true
-      body:
-        name: Spectral
-        weights: [300, 400, 500, 600, 700, 800]
-        includeItalic: true
-      code:
-        name: IBM Plex Mono
-        weights: [400, 500, 600]
+      title: 'Georgia, "Times New Roman", serif'
+      header: 'Georgia, "Times New Roman", serif'
+      body: "Arial, Helvetica, sans-serif"
+      code: '"Courier New", ui-monospace, monospace'
     colors:
       lightMode:
-        light: "#E4E6E0"
-        lightgray: "#D4D6D0"
-        gray: "#8A918B"
-        darkgray: "#565E58"
-        dark: "#181B19"
-        secondary: "#114E47"
-        tertiary: "#18675C"
-        highlight: "rgba(17,78,71,0.08)"
-        textHighlight: "rgba(17,78,71,0.12)"
+        light: "#f6f4ee"
+        lightgray: "#eceee5"
+        gray: "#9da49c"
+        darkgray: "#59635d"
+        dark: "#202c2a"
+        secondary: "#ac3f2b"
+        tertiary: "#364f42"
+        highlight: "rgba(172,63,43,0.10)"
+        textHighlight: "rgba(172,63,43,0.16)"
       darkMode:
-        light: "#1a1d1b"
-        lightgray: "#2a2d2b"
-        gray: "#8A918B"
-        darkgray: "#c4c8c5"
-        dark: "#E4E6E0"
-        secondary: "#3da89b"
-        tertiary: "#5ec4b7"
-        highlight: "rgba(61,168,155,0.08)"
-        textHighlight: "rgba(61,168,155,0.12)"
+        light: "#f6f4ee"
+        lightgray: "#eceee5"
+        gray: "#9da49c"
+        darkgray: "#59635d"
+        dark: "#202c2a"
+        secondary: "#ac3f2b"
+        tertiary: "#364f42"
+        highlight: "rgba(172,63,43,0.10)"
+        textHighlight: "rgba(172,63,43,0.16)"
 plugins:
   - source: "@quartz-community/created-modified-date"
     enabled: true
@@ -107,6 +100,14 @@ plugins:
     order: 92
   - source: "@quartz-community/quartz-fonts"
     enabled: true
+    options:
+      useThemeFonts: false
+      fontOrigin: local
+      title: 'Georgia, "Times New Roman", serif'
+      header: 'Georgia, "Times New Roman", serif'
+      body: "Arial, Helvetica, sans-serif"
+      interface: "Arial, Helvetica, sans-serif"
+      code: '"Courier New", ui-monospace, monospace'
   - source: "@quartz-themes/core"
     enabled: false
     options:
@@ -126,7 +127,7 @@ plugins:
   - source: "@quartz-community/favicon"
     enabled: true
   - source: "@quartz-community/og-image"
-    enabled: true
+    enabled: false
   - source: "@quartz-community/cname"
     enabled: true
   - source: "@quartz-community/canvas-page"
@@ -181,7 +182,7 @@ plugins:
       position: left
       priority: 10
   - source: "@quartz-community/darkmode"
-    enabled: true
+    enabled: false
     layout:
       position: left
       priority: 30
@@ -210,8 +211,9 @@ plugins:
     enabled: true
     options:
       links:
-        GitHub: https://github.com
-        RSS: /index.xml
+        GitHub: https://github.com/thanhxtruong
+        Work: https://thanhxtruong.github.io/thanh-architecture-portfolio/case-studies/
+        RSS: https://thanhxtruong.github.io/thanh-architecture-portfolio/index.xml
     layout:
       position: footer
       priority: 50
