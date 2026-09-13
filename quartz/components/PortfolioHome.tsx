@@ -203,7 +203,7 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles }: QuartzComponentP
       <section id="work" class="portfolio-section">
         <div class="portfolio-section-heading">
           <div>
-            <p class="portfolio-eyebrow">01 / Selected work</p>
+            <p class="portfolio-eyebrow">01 / What I shipped</p>
             <h2>Problems solved, start to finish</h2>
           </div>
           <p>What I built, how I tested it, and the tradeoffs.</p>
