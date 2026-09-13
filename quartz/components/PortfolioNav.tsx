@@ -1,5 +1,7 @@
 import { FullSlug, resolveRelative } from "../util/path"
 import { QuartzComponent, QuartzComponentConstructor } from "./types"
+// @ts-ignore
+import portfolioResumeScript from "./scripts/portfolioResume.inline"
 
 const PortfolioNav: QuartzComponent = ({ fileData }) => {
   const current = fileData.slug ?? ("index" as FullSlug)
@@ -30,5 +32,7 @@ const PortfolioNav: QuartzComponent = ({ fileData }) => {
     </div>
   )
 }
+
+PortfolioNav.afterDOMLoaded = portfolioResumeScript
 
 export default (() => PortfolioNav) satisfies QuartzComponentConstructor
