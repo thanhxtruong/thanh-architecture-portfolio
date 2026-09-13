@@ -1,9 +1,7 @@
 ---
 title: "Résumé"
 publish: false
-description: "Professional experience and selected engineering work."
+description: "The résumé is rendered as a section of the About page."
 ---
 
-<!-- Add the reviewed résumé content here, then set publish to true. -->
-
-<!-- If a sanitized PDF is added under attachments/, link it from this page. -->
+<!-- The public résumé section now lives in about.md so About and Résumé render together at /about. -->

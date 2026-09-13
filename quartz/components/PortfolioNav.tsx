@@ -4,6 +4,7 @@ import { QuartzComponent, QuartzComponentConstructor } from "./types"
 const PortfolioNav: QuartzComponent = ({ fileData }) => {
   const current = fileData.slug ?? ("index" as FullSlug)
   const home = resolveRelative(current, "index" as FullSlug)
+  const about = resolveRelative(current, "about" as FullSlug)
   const section = (anchor: string) => `${home}#${anchor}`
 
   return (
@@ -21,6 +22,7 @@ const PortfolioNav: QuartzComponent = ({ fileData }) => {
         <a href={section("work")}>What I Shipped</a>
         <a href={section("investigations")}>System Investigations</a>
         <a href={section("decisions")}>Decisions</a>
+        <a href={about}>About</a>
         <a class="portfolio-nav-contact" href="https://github.com/thanhxtruong">
           GitHub <span aria-hidden="true">↗</span>
         </a>
