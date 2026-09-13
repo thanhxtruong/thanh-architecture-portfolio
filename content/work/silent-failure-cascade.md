@@ -5,6 +5,8 @@ type: project
 date: 2026-08-22
 description: "Four fixes, each one assuming the failure was contained — and each one wrong about where the boundary actually was."
 tags: [case-study]
+aliases:
+  - case-studies/silent-failure-cascade-erp-outbox
 featured: true
 featured_order: 1
 focus: "Investigate & improve"

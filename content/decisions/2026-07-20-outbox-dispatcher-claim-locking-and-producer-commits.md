@@ -7,7 +7,7 @@ description: Building the background dispatcher that drains a transactional outb
 tags: [adr]
 status: accepted
 decision_id: "ADR-020"
-related_project: "[[reliable-erp-outbox]]"
+related_project: "[[work/reliable-erp-outbox]]"
 ---
 
 <p class="eyebrow">Decision record</p>

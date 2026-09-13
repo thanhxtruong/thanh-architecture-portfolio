@@ -7,7 +7,7 @@ description: Designing the retry lifecycle for a transactional outbox that deliv
 tags: [adr]
 status: accepted
 decision_id: "ADR-013"
-related_project: "[[reliable-erp-outbox]]"
+related_project: "[[work/reliable-erp-outbox]]"
 ---
 
 <p class="eyebrow">Decision record</p>

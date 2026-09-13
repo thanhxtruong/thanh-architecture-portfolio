@@ -5,6 +5,8 @@ type: project
 date: 2026-05-25
 description: "One symptom — a write gets dropped — with three unrelated root causes. Separating them was the whole job."
 tags: [case-study]
+aliases:
+  - case-studies/stale-writes-erp-sync
 featured: true
 featured_order: 3
 focus: "Design & guide"

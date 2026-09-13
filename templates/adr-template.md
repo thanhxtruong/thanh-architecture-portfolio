@@ -7,7 +7,7 @@ description: "<one sentence — used as the card preview>"
 tags: [adr]
 status: proposed
 decision_id: "ADR-000"
-related_project: "[[project-slug]]"
+related_project: "[[work/project-slug]]"
 supersedes: ""
 superseded-by: ""
 ---

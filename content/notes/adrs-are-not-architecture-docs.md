@@ -4,6 +4,8 @@ publish: true
 date: 2026-05-10
 description: "Two artifacts that fail in opposite ways — one immutable and about why, one living and about what. Conflating them undermines both."
 tags: [practice]
+aliases:
+  - practice/adrs-are-not-architecture-docs
 ---
 
 <p class="eyebrow">On practice</p>
@@ -16,6 +18,6 @@ If you treat the ADR as a living document, you lose the historical record. The r
 
 If you treat the architecture doc as immutable, it rots. The system moves on, the doc doesn't, and within months it's a misleading artifact that new joiners read and form wrong mental models from. Architecture docs need to be updated or they actively harm.
 
-The practical rule: **ADRs are append-only; architecture docs are mutable.** An ADR can be *superseded* by a later ADR (with a link), but the original stays intact. An architecture doc gets rewritten when the system it describes changes.
+The practical rule: **ADRs are append-only; architecture docs are mutable.** An ADR can be _superseded_ by a later ADR (with a link), but the original stays intact. An architecture doc gets rewritten when the system it describes changes.
 
 Teams that maintain both — a chronological log of decisions and a living map of the system — tend to onboard faster and argue less. Teams that try to combine them into one artifact end up with neither: a document that's too stale to trust and too edited to learn from.

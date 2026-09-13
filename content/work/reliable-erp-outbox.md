@@ -5,6 +5,8 @@ type: project
 date: 2026-07-30
 description: "A transactional outbox, retry-aware HTTP client, concurrent dispatcher, and idempotency guard designed around an irreversible external side effect."
 tags: [case-study, outbox, reliability]
+aliases:
+  - case-studies/reliable-erp-outbox
 featured: true
 featured_order: 2
 focus: "Build & deliver"

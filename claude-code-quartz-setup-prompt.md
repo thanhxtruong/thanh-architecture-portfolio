@@ -4,9 +4,10 @@
 
 Set up a Quartz static site that publishes a personal software-architecture portfolio, and theme it to match a provided HTML design mockup as closely as possible. The portfolio has three content types — **decision records (ADRs)**, **case studies**, and **on-practice notes** — authored as Markdown in a separate, private Obsidian vault and copied here after sanitization.
 
-**This Quartz repo is intentionally separate from the private Obsidian vault.** The vault contains private learning notes, raw drafts, and unsanitized work material that must never reach a public host. This repo contains *only* the Quartz machinery and already-sanitized portfolio content. The separation is structural: private material is never copied in, so the repo can safely be public. Do not symlink to, reference, or import from any external vault directory.
+**This Quartz repo is intentionally separate from the private Obsidian vault.** The vault contains private learning notes, raw drafts, and unsanitized work material that must never reach a public host. This repo contains _only_ the Quartz machinery and already-sanitized portfolio content. The separation is structural: private material is never copied in, so the repo can safely be public. Do not symlink to, reference, or import from any external vault directory.
 
 Two things matter above all else, in order:
+
 1. **Do not leak private content.** This portfolio is derived from work at a company with confidentiality obligations. The publish gate must be fail-safe. Getting this wrong is the only unrecoverable error here.
 2. **Match the mockup's visual design.** The file `architecture-portfolio-mockup.html` (provided in this repo) is the authoritative design spec. Read it and reproduce its look.
 
@@ -27,13 +28,15 @@ quartz-portfolio/              ← THIS repo (public-safe)
 │   ├── decisions/             → Layer 1 ADRs
 │   │   ├── index.md
 │   │   └── YYYY-MM-DD-slug.md
-│   ├── case-studies/          → Layer 2
+│   ├── work/                  → Selected engineering work
 │   │   ├── index.md
 │   │   └── slug.md
-│   ├── practice/              → Layer 3
+│   ├── notes/                 → Supporting notes
 │   │   ├── index.md
 │   │   └── slug.md
-│   └── attachments/           → sanitized images/diagrams ONLY
+│   ├── about.md               → dedicated about page
+│   ├── resume.md              → optional HTML résumé
+│   └── attachments/           → sanitized images, diagrams, and résumé PDF ONLY
 ├── templates/                 → note templates (for reference; not built by Quartz)
 ├── architecture-portfolio-mockup.html   → design spec
 ├── quartz.config.ts
@@ -58,6 +61,7 @@ Implement defense in depth on top of the structural separation:
 4. **No symlinks to external directories.** Do not symlink `content/` or any subfolder to the vault. Content lives in this repo by copy, not by reference — symlinks would break CI builds AND blur the sanitization boundary.
 
 **Checkpoint — STOP and report after implementing the gate.** Prove it works before continuing:
+
 - Create a throwaway note under `content/` WITHOUT `publish: true`, run `npx quartz build`, and confirm it does NOT appear in the `public/` output.
 - Place a throwaway image under `content/attachments/` with a random name, build, and confirm you CAN reach it at its URL in `public/` (this proves the attachment-awareness warning is real — non-Markdown files bypass the publish filter).
 - Remove the throwaway files after the checks.
@@ -66,7 +70,7 @@ Implement defense in depth on top of the structural separation:
 ## Setup steps
 
 1. Scaffold Quartz: `git clone https://github.com/jackyzha0/quartz.git`, `cd quartz`, `npm i`, `npx quartz create` (choose the **obsidian** template, content directory is the default `content/`), then `npx quartz plugin install --from-config`.
-2. Set up the folder structure inside `content/` per the diagram above (`decisions/`, `case-studies/`, `practice/`, `attachments/`, each with an `index.md`). Create `templates/` at the repo root (outside `content/`, so Quartz ignores it) for the note templates.
+2. Set up the folder structure inside `content/` per the diagram above (`work/`, `decisions/`, `notes/`, and `attachments/`, with section indexes in the first three folders). Create `about.md` and the optional `resume.md` at the content root. Create `templates/` at the repo root (outside `content/`, so Quartz ignores it) for the note templates.
 3. Implement and verify the publish gate. **Checkpoint.**
 4. Establish content structure and frontmatter schema (below).
 5. Global theming to match the mockup.
@@ -76,19 +80,19 @@ Implement defense in depth on top of the structural separation:
 
 ## Content structure & frontmatter schema
 
-Folders under `content/`: `decisions/`, `case-studies/`, `practice/`, `attachments/`, plus a root `index.md` (landing) and an `index.md` in each of the three folders (section pages).
+Folders under `content/`: `work/`, `decisions/`, `notes/`, and `attachments/`, plus root-level `index.md` (landing), `about.md`, and optional `resume.md`. The first three folders each have an `index.md` section page.
 
 Frontmatter every content note uses:
 
 ```yaml
 ---
 title: <string>
-publish: false            # flipped to true only when ready
+publish: false # flipped to true only when ready
 date: YYYY-MM-DD
 description: <one sentence — used as the card preview>
 tags: [adr | case-study | practice, ...]
-status: accepted          # ADRs only: proposed | accepted | superseded
-supersedes: "[[slug]]"    # ADRs only, optional
+status: accepted # ADRs only: proposed | accepted | superseded
+supersedes: "[[slug]]" # ADRs only, optional
 superseded-by: "[[slug]]" # ADRs only, optional
 ---
 ```
@@ -98,6 +102,7 @@ Folders map to the three nav sections. `date` renders on the page; `description`
 ## Design tokens (from the mockup — authoritative values)
 
 **Color**
+
 - paper `#E4E6E0`; paper-raised `#EFF0EB`; paper-raised-2 `#F4F5F0`
 - ink `#181B19`; ink-soft `#565E58`; ink-faint `#8A918B`
 - petrol (primary accent) `#114E47`; petrol-bright (hover) `#18675C`
@@ -106,12 +111,14 @@ Folders map to the three nav sections. `date` renders on the page; `description`
 - Background has a faint petrol radial wash in the top-right corner.
 
 **Type** — load from Google Fonts.
+
 - Serif: **Spectral** (weights 300–800 + italic) — ALL prose and headings.
 - Mono: **IBM Plex Mono** (400/500/600) — the metadata layer ONLY: eyebrow labels, dates, status, filenames, tags, and inline version tokens like `n+1`.
 - This serif/mono split is meaningful: serif = argument, mono = machine-fact. Preserve it.
-- Base body ~18px, line-height ~1.62. Headings tight tracking (~-0.01 to -0.02em). Eyebrow/label text: mono, uppercase, letter-spacing ~0.14–0.16em, petrol or faint.
+- Base body ~18px, line-height ~~1.62. Headings tight tracking (~~-0.01 to -0.02em). Eyebrow/label text: mono, uppercase, letter-spacing ~0.14–0.16em, petrol or faint.
 
 **Structure & motifs**
+
 - Left rail: sticky, with a serif wordmark, a mono role line, and a numbered "Contents" nav (`01 Decisions`, `02 Case studies`, `03 On practice`) with per-section counts, plus a small mono "Note" about content being sanitized. Collapses to top on narrow screens.
 - Eyebrow labels above titles (mono, with a trailing hairline that fills remaining width).
 - Section rules = thin hairlines.
