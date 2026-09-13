@@ -7,6 +7,7 @@ description: "Four fixes, each one assuming the failure was contained — and ea
 tags: [case-study]
 aliases:
   - case-studies/silent-failure-cascade-erp-outbox
+  - work/silent-failure-cascade
 featured: true
 featured_order: 1
 focus: "Investigate & improve"
@@ -108,7 +109,7 @@ It found nothing. The original record still had `NULL` identifiers — because o
 
 A unique constraint on `(partner, contract ID)` prevented both from holding the same identifiers. When the outbox retry eventually succeeded and the dispatcher tried to persist the identifiers on the original record, it hit the constraint violation against the shell.
 
-This was caught by design — an earlier architectural decision (the [idempotency guard](2026-07-30-erp-contract-persistence-idempotency-guard.md)) established that a local persistence failure must never trigger a retry that re-invokes the ERP, because the ERP's side effect is irreversible. So the exception was logged and dropped. The entry was marked `Delivered`. The identifiers stayed `NULL`.
+This was caught by design — an earlier architectural decision (the [idempotency guard](../decisions/2026-07-30-erp-contract-persistence-idempotency-guard.md)) established that a local persistence failure must never trigger a retry that re-invokes the ERP, because the ERP's side effect is irreversible. So the exception was logged and dropped. The entry was marked `Delivered`. The identifiers stayed `NULL`.
 
 I'd designed that catch block. It was doing exactly what I'd intended. But "caught by design" in this context meant "silently permanent" — the only evidence was a log line that would age out of retention. No alert, no retry of the local write, no queryable state.
 

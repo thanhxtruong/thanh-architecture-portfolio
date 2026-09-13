@@ -20,6 +20,9 @@ const frontmatter = (file: QuartzPluginData): Frontmatter =>
 
 const titleFor = (file: QuartzPluginData) => text(frontmatter(file).title, "Untitled")
 
+const isInFolder = (file: QuartzPluginData, folder: string) =>
+  file.slug === `${folder}/index` || file.slug?.startsWith(`${folder}/`)
+
 const projectFiles = (allFiles: QuartzPluginData[]) =>
   allFiles
     .filter((file) => {
@@ -140,12 +143,8 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles }: QuartzComponentP
   const fm = frontmatter(fileData)
   const current = fileData.slug ?? ("index" as FullSlug)
   const projects = projectFiles(allFiles)
-  const investigationProjects = projects.filter(
-    (file) => text(frontmatter(file).focus) === "Investigate & improve",
-  )
-  const selectedProjects = projects.filter(
-    (file) => text(frontmatter(file).focus) !== "Investigate & improve",
-  )
+  const investigationProjects = projects.filter((file) => isInFolder(file, "investigations"))
+  const selectedProjects = projects.filter((file) => isInFolder(file, "work"))
   const [featuredProject, ...supportingProjects] = selectedProjects
   const decisions = decisionFiles(allFiles)
 
@@ -192,7 +191,7 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles }: QuartzComponentP
           </strong>
           <span>Production failures traced to root cause and contained</span>
         </a>
-        <a href="#decisions" aria-label="Design and guide: go to Decision Records">
+        <a href="#decisions" aria-label="Design and guide: go to Decisions">
           <strong>
             Design &amp; guide <span aria-hidden="true">↓</span>
           </strong>
@@ -234,7 +233,7 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles }: QuartzComponentP
       <section id="decisions" class="portfolio-section">
         <div class="portfolio-section-heading">
           <div>
-            <p class="portfolio-eyebrow">03 / Decision records</p>
+            <p class="portfolio-eyebrow">03 / Decisions</p>
             <h2>The reasoning behind the code.</h2>
           </div>
           <p>What was accepted, what it cost, and the assumptions that hold it.</p>

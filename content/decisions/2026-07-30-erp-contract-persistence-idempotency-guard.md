@@ -46,7 +46,7 @@ Three related gaps existed in the outbox dispatcher's handling of a successful E
 > [!option-chosen] Isolate the persistence in its own error boundary, never retry the ERP call
 > The contract-details persistence runs inside its own try/catch, deliberately separated from the dispatcher's outer error handling. A failure here is logged for manual reconciliation but never propagated to the retry mechanism. The reasoning: the worst outcome of a missed local write is a data gap that a human or reconciliation job can repair; the worst outcome of a duplicate ERP call is a second billable contract that requires cross-organization coordination to reverse.
 >
-> _(This isolation was later strengthened — see the [silent failure cascade case study](../work/silent-failure-cascade.md) — when a production incident revealed that the persistence failure could corrupt the ORM context and cascade into subsequent entries in the same batch.)_
+> _(This isolation was later strengthened — see the [silent failure cascade case study](../investigations/silent-failure-cascade.md) — when a production incident revealed that the persistence failure could corrupt the ORM context and cascade into subsequent entries in the same batch.)_
 
 ### Decision
 
@@ -65,7 +65,7 @@ Supporting decisions:
 
 ### Runtime assumptions
 
-- **Two independent write paths for the same identifiers.** The outbox dispatcher's synchronous HTTP response and the ERP's asynchronous event-driven notification both attempt to persist the same contract identifiers on the same local record. The pre-send guard makes this safe for the outbox path (it won't re-invoke the ERP if the event-driven path got there first). But the two paths can race: if the event arrives while the outbox entry is still in-flight, both may attempt to write simultaneously. A unique constraint on the identifier columns prevents duplicate records but can cause the losing write to fail — see the [silent failure cascade case study](../work/silent-failure-cascade.md) for how this race manifested in production.
+- **Two independent write paths for the same identifiers.** The outbox dispatcher's synchronous HTTP response and the ERP's asynchronous event-driven notification both attempt to persist the same contract identifiers on the same local record. The pre-send guard makes this safe for the outbox path (it won't re-invoke the ERP if the event-driven path got there first). But the two paths can race: if the event arrives while the outbox entry is still in-flight, both may attempt to write simultaneously. A unique constraint on the identifier columns prevents duplicate records but can cause the losing write to fail — see the [silent failure cascade case study](../investigations/silent-failure-cascade.md) for how this race manifested in production.
 - **Irreversibility asymmetry is the governing constraint.** The ERP's contract creation is irreversible once committed. Local database writes are fallible. Every error-handling decision in this flow is downstream of that asymmetry: never retry the ERP call after success, never let a local failure trigger a code path that re-invokes the ERP, and accept that a data gap requiring manual repair is strictly preferable to a duplicate billable contract.
 - **The pre-send guard is scoped to the contract-creation command type.** Future command types may legitimately need to re-invoke the ERP even when identifiers are present (e.g., an update or cancellation command). The guard's scope is intentionally narrow to avoid blocking those future paths.
 
