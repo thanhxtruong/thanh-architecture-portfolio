@@ -1,11 +1,9 @@
-import { htmlToJsx } from "../util/jsx"
-import { FilePath, FullSlug, resolveRelative } from "../util/path"
+import { FullSlug, resolveRelative } from "../util/path"
 import { QuartzPluginData } from "../plugins/vfile"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 
 type Frontmatter = Record<string, unknown>
 type Fact = { value: string; label: string }
-type ApproachStep = { title: string; description: string }
 
 const text = (value: unknown, fallback = "") => (typeof value === "string" ? value : fallback)
 
@@ -138,7 +136,7 @@ function ProjectCard({
   )
 }
 
-const PortfolioHome: QuartzComponent = ({ fileData, allFiles, tree }: QuartzComponentProps) => {
+const PortfolioHome: QuartzComponent = ({ fileData, allFiles }: QuartzComponentProps) => {
   const fm = frontmatter(fileData)
   const current = fileData.slug ?? ("index" as FullSlug)
   const projects = projectFiles(allFiles)
@@ -150,7 +148,6 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles, tree }: QuartzComp
   )
   const [featuredProject, ...supportingProjects] = selectedProjects
   const decisions = decisionFiles(allFiles)
-  const approach = records<ApproachStep>(fm.approach)
 
   return (
     <article class="portfolio-home" id="top">
@@ -265,37 +262,6 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles, tree }: QuartzComp
               </details>
             )
           })}
-        </div>
-      </section>
-
-      <section id="approach" class="portfolio-method">
-        <div>
-          <p class="portfolio-eyebrow">04 / How I work</p>
-          <h2>
-            Understand it.
-            <br />
-            Build it.
-            <br />
-            Own the outcome.
-          </h2>
-          <p>Good system design informs how I write, review, test, and operate code.</p>
-        </div>
-        <ol>
-          {approach.map((step) => (
-            <li>
-              <div>
-                <strong>{text(step.title)}</strong>
-                <p>{text(step.description)}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section id="about" class="portfolio-about portfolio-section">
-        <p class="portfolio-eyebrow">05 / About &amp; collaboration</p>
-        <div class="portfolio-authored">
-          {htmlToJsx((fileData.filePath ?? "content/index.md") as FilePath, tree)}
         </div>
       </section>
 
