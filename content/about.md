@@ -11,7 +11,7 @@ cssclasses:
 <div class="portfolio-about-layout" id="about">
   <section class="portfolio-about-copy" aria-labelledby="about-heading">
     <p class="portfolio-eyebrow">Experience &amp; Background</p>
-    <h2 id="about-heading">Fifteen years of engineering with the last seven in software engineering.</h2>
+    <h2 id="about-heading">15 years of engineering with the last seven in software engineering.</h2>
     <p>Before software engineering, I spent 9 years in the medical device industry - product design, manufacturing engineering, quality and regulatory control. I learned about product design principles, how to trace failures to root causes, design decision documentation, failure mode analysis, and root cause analysis. When I moved into software, those skills became extremely useful.</p>
     <p>Today I build production systems for a healthcare technology company - IoT telemetry ingestion, Oracle ERP and Paymetrics integrations, event-driven services, and the web applications that surface data to the customers, service staff, and dealers. My work include C# backend, React frontend, Azure infrastrucure and IaC via Terraform, automated testing, code reviews, and production incident support.</p>
     <p class="portfolio-best-fit"><strong>Best fit:</strong> a Senior Software Engineer role with ownership of substantial fullstack development, meaningful production responsibility, and room to contribute to system design decisions across service boundaries.</p>

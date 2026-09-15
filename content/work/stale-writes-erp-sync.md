@@ -1,6 +1,6 @@
 ---
 title: "Controlling stale writes in an ERP-to-portal sync"
-publish: true
+publish: false
 type: project
 date: 2026-05-25
 description: "One symptom — a write gets dropped — with three unrelated root causes. Separating them was the whole job."

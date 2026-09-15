@@ -1,6 +1,6 @@
 ---
 title: "Building a reliable ERP delivery pipeline"
-publish: true
+publish: false
 type: project
 date: 2026-07-30
 description: "A transactional outbox, retry-aware HTTP client, concurrent dispatcher, and idempotency guard designed around an irreversible external side effect."
