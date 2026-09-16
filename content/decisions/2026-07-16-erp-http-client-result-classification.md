@@ -7,7 +7,7 @@ description: Designing a typed HTTP client whose result type feeds directly into
 tags: [adr]
 status: accepted
 decision_id: "ADR-016"
-related_project: "[[work/reliable-erp-outbox]]"
+related_project: "[[case-studies/reliable-erp-outbox]]"
 ---
 
 <p class="eyebrow">Decision record</p>

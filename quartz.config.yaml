@@ -212,7 +212,7 @@ plugins:
     options:
       links:
         GitHub: https://github.com/thanhxtruong
-        Work: https://thanhxtruong.github.io/thanh-architecture-portfolio/work/
+        Case Studies: https://thanhxtruong.github.io/thanh-architecture-portfolio/#case-studies
         RSS: https://thanhxtruong.github.io/thanh-architecture-portfolio/index.xml
     layout:
       position: footer

@@ -7,12 +7,18 @@ description: "Four fixes, each one assuming the failure was contained — and ea
 tags: [case-study]
 aliases:
   - case-studies/silent-failure-cascade-erp-outbox
+  - investigations/silent-failure-cascade
   - work/silent-failure-cascade
 featured: true
 featured_order: 1
 focus: "Investigate & improve"
 project_status: "Production investigation"
 period: "2026"
+case_theme: "ERP integration"
+case_topics: "Failure containment · Recovery"
+card_summary: "A duplicate-contract incident looked contained four separate times. Following the failure outward exposed the timeout, competing write paths, a poisoned ORM context, and a shared batch scope."
+inside_case: "the propagation path, a four-layer boundary diagram, and the containment changes that stopped one failed entry from contaminating the next"
+at_stake: "preventing one uncertain delivery from becoming a second billable contract"
 summary: "Traced a duplicate-contract incident through timeout configuration, competing write paths, a poisoned ORM context, and a shared batch scope."
 my_contribution: "Investigated the cascading failure and implemented timeout, recovery-scope, per-entry-scope, and batch-containment changes."
 demonstrates: "evidence-led debugging, failure containment, and revising earlier assumptions"
@@ -23,21 +29,14 @@ facts:
     label: "ORM scope after isolation"
 ---
 
-<p class="eyebrow">Case study · Distributed systems</p>
-
-<div class="doc-meta">
-<span>~15 min read</span>
-<span class="doc-meta-faint">outbox · ERP integration · scope isolation · failure cascades</span>
-</div>
-
-A production incident created a second, genuinely separate billable contract in an external ERP for a subscription that already had one. Four independent decisions — each correct when it was made — chained together to produce it.
-
-What makes this worth writing up isn't the bug. It's that I fixed it four times. Each fix addressed a real mechanism and each one left me believing the failure was contained. Each time, the blast radius extended one boundary further than I'd checked. The pattern in my own reasoning turned out to be more useful than any individual fix.
-
 > [!artifacts] Artifacts in this case study
 >
 > - [Boundary diagram: four propagation layers](#artifact-boundary-diagram-four-propagation-layers)
 > - [Containment map: entry state versus batch state](#artifact-containment-map-entry-state-versus-batch-state)
+
+A production incident created a second, genuinely separate billable contract in an external ERP for a subscription that already had one. Four independent decisions — each correct when it was made — chained together to produce it.
+
+What makes this worth writing up isn't the bug. It's that I fixed it four times. Each fix addressed a real mechanism and each one left me believing the failure was contained. Each time, the blast radius extended one boundary further than I'd checked. The pattern in my own reasoning turned out to be more useful than any individual fix.
 
 ### Artifact: Boundary diagram: four propagation layers
 

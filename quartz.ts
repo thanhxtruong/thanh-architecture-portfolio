@@ -1,16 +1,29 @@
 import { loadQuartzConfig, loadQuartzLayout } from "./quartz/plugins/loader/config-loader"
 import PortfolioNav from "./quartz/components/PortfolioNav"
 import { PageTypeDispatcher } from "./quartz/plugins/pageTypes/dispatcher"
+import { PortfolioCaseStudyPage } from "./quartz/plugins/pageTypes/portfolioCaseStudy"
 import { PortfolioHomePage } from "./quartz/plugins/pageTypes/portfolioHome"
 
 const config = await loadQuartzConfig()
-config.plugins.pageTypes = [PortfolioHomePage(), ...(config.plugins.pageTypes ?? [])]
+config.plugins.pageTypes = [
+  PortfolioHomePage(),
+  PortfolioCaseStudyPage(),
+  ...(config.plugins.pageTypes ?? []),
+]
 
 const portfolioNav = PortfolioNav()
 
 export const layout = await loadQuartzLayout({
   byPageType: {
     "portfolio-home": {
+      header: [portfolioNav],
+      beforeBody: [],
+      afterBody: [],
+      left: [],
+      right: [],
+      frame: "full-width",
+    },
+    "portfolio-case-study": {
       header: [portfolioNav],
       beforeBody: [],
       afterBody: [],

@@ -21,9 +21,7 @@ const PortfolioNav: QuartzComponent = ({ fileData }) => {
         </span>
       </a>
       <nav class="portfolio-nav" aria-label="Main navigation">
-        <a href={section("work")}>What I Shipped</a>
-        <a href={section("investigations")}>System Investigations</a>
-        <a href={section("decisions")}>Decisions</a>
+        <a href={section("case-studies")}>Case Studies</a>
         <a href={about}>About</a>
         <a class="portfolio-nav-contact" href="https://github.com/thanhxtruong">
           GitHub <span aria-hidden="true">↗</span>

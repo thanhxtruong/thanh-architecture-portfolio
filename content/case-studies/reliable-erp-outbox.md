@@ -6,12 +6,17 @@ date: 2026-07-30
 description: "A transactional outbox, retry-aware HTTP client, concurrent dispatcher, and idempotency guard designed around an irreversible external side effect."
 tags: [case-study, outbox, reliability]
 aliases:
-  - case-studies/reliable-erp-outbox
+  - work/reliable-erp-outbox
 featured: true
-featured_order: 2
+featured_order: 3
 focus: "Build & deliver"
 project_status: "Implemented subsystem"
 period: "2026"
+case_theme: "ERP delivery"
+case_topics: "Outbox · Concurrency"
+card_summary: "A reliable delivery path has to coordinate an atomic business write, retry-aware transport, concurrent claiming, and protection against repeating an irreversible side effect."
+inside_case: "the delivery boundary, concurrent-claim integration test, and the retry and idempotency tradeoffs"
+at_stake: "reliable delivery without duplicate ERP side effects"
 summary: "Built the path from an atomic business write to asynchronous ERP delivery, including retry classification, concurrent claiming, and duplicate-side-effect protection."
 my_contribution: "Implemented the dispatcher and unit-of-work seam, shaped the retry and client contracts, and added real-database concurrent-claim verification."
 demonstrates: "turning system constraints into maintainable code, tests, and explicit operational tradeoffs"
