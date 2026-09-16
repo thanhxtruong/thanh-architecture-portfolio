@@ -100,7 +100,7 @@ const PortfolioHome: QuartzComponent = ({ fileData, allFiles }: QuartzComponentP
       <section id="case-studies" class="portfolio-section portfolio-case-studies">
         <div class="portfolio-section-heading">
           <div>
-            <p class="portfolio-eyebrow">01 / Case Studies</p>
+            <p class="portfolio-eyebrow">Case Studies</p>
             <h2>
               What the system actually does,
               <br />
