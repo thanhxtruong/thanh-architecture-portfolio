@@ -665,7 +665,7 @@ pre {
   display: flex;
   justify-content: space-between;
   gap: 1.25rem;
-  padding: 1.55rem 0 1.9rem;
+  padding: 1.55rem 1.25rem 1.9rem;
   border-top: 1px solid var(--portfolio-line);
   color: var(--portfolio-muted);
   font: 0.69rem/1.8 var(--portfolio-mono);
@@ -673,6 +673,16 @@ pre {
   p {
     margin: 0;
   }
+}
+
+// Quartz gives frame footers a 100% minimum width. Override that frame rule so
+// this footer follows the same centered page gutter as the portfolio content.
+.page > #quartz-body > .portfolio-footer {
+  width: min(73.75rem, calc(100% - 5rem));
+  min-width: 0;
+  max-width: 73.75rem;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .portfolio-footer-links {
@@ -981,7 +991,7 @@ pre {
   border-top: 1px solid var(--portfolio-ink);
 }
 
-.portfolio-contact-link {
+a.portfolio-contact-link {
   display: flex;
   justify-content: space-between;
   gap: 1.9rem;
@@ -1079,6 +1089,10 @@ pre {
     > article:not(.portfolio-home, .portfolio-collection-page, .portfolio-static-page),
   .center.full-width > .page-footer,
   .center.full-width .page-header > .popover-hint {
+    width: calc(100% - 2.5rem);
+  }
+
+  .page > #quartz-body > .portfolio-footer {
     width: calc(100% - 2.5rem);
   }
 
