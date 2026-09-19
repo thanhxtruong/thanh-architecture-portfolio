@@ -7,27 +7,63 @@ const PortfolioNav: QuartzComponent = ({ fileData }) => {
   const current = fileData.slug ?? ("index" as FullSlug)
   const home = resolveRelative(current, "index" as FullSlug)
   const about = resolveRelative(current, "about" as FullSlug)
-  const section = (anchor: string) => `${home}#${anchor}`
+  const cases = resolveRelative(current, "case-studies/index" as FullSlug)
+  const writing = resolveRelative(current, "writing/index" as FullSlug)
+  const contact = resolveRelative(current, "contact" as FullSlug)
+  const section = current.split("/")[0]
+  const active = current === "about" ? "about" : current === "contact" ? "contact" : section
 
   return (
-    <div class="portfolio-nav-shell">
-      <a class="portfolio-brand" href={home} aria-label="Thanh home">
-        <span class="portfolio-monogram" aria-hidden="true">
-          tt
-        </span>
-        <span>
-          <strong>Thanh Truong</strong>
-          <small>Senior Software Engineer</small>
-        </span>
+    <>
+      <a class="portfolio-skip" href="#main-content">
+        Skip to content
       </a>
-      <nav class="portfolio-nav" aria-label="Main navigation">
-        <a href={section("case-studies")}>Case Studies</a>
-        <a href={about}>About</a>
-        <a class="portfolio-nav-contact" href="https://github.com/thanhxtruong">
-          GitHub <span aria-hidden="true">↗</span>
+      <div class="portfolio-nav-shell">
+        <a class="portfolio-brand" href={home} aria-label="Thanh Truong home">
+          <span class="portfolio-monogram" aria-hidden="true">
+            tt
+          </span>
+          <span>
+            <strong>Thanh Truong</strong>
+            <small>Software engineer &amp; builder</small>
+          </span>
         </a>
-      </nav>
-    </div>
+        <button
+          class="portfolio-menu-toggle"
+          aria-expanded="false"
+          aria-controls="portfolio-main-nav"
+          type="button"
+        >
+          Menu
+        </button>
+        <nav id="portfolio-main-nav" class="portfolio-nav" aria-label="Main navigation">
+          <a
+            class="internal"
+            aria-current={active === "case-studies" ? "page" : undefined}
+            href={cases}
+          >
+            Case Studies
+          </a>
+          <a
+            class="internal"
+            aria-current={active === "writing" ? "page" : undefined}
+            href={writing}
+          >
+            Writing
+          </a>
+          <a class="internal" aria-current={active === "about" ? "page" : undefined} href={about}>
+            About
+          </a>
+          <a
+            class="internal portfolio-nav-contact"
+            aria-current={active === "contact" ? "page" : undefined}
+            href={contact}
+          >
+            Contact <span aria-hidden="true">↗</span>
+          </a>
+        </nav>
+      </div>
+    </>
   )
 }
 

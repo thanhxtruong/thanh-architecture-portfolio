@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=./quartz/plugins/quartz-plugins.schema.json
 configuration:
-  pageTitle: "Thanh — Senior Software Engineer"
+  pageTitle: "Thanh Truong — Built by Thanh"
   pageTitleSuffix: ""
   enableSPA: true
   enablePopovers: true
@@ -213,6 +213,7 @@ plugins:
       links:
         GitHub: https://github.com/thanhxtruong
         Case Studies: https://thanhxtruong.github.io/thanh-architecture-portfolio/#case-studies
+        Writing: https://thanhxtruong.github.io/thanh-architecture-portfolio/writing/
         RSS: https://thanhxtruong.github.io/thanh-architecture-portfolio/index.xml
     layout:
       position: footer

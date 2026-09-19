@@ -1,19 +1,15 @@
 ---
-title: "Thanh — Senior Software Engineer"
+title: "Thanh Truong — Built by Thanh"
 publish: true
 type: home
-description: "Senior Software Engineer portfolio focused on fullstack delivery, production reliability, and architectural judgment."
-eyebrow: "Fullstack engineering · Systems thinking · Delivery"
+description: "Senior Software Engineer building production software, investigating system behavior, and explaining the decisions along the way."
+eyebrow: "Fullstack engineering · Systems thinking"
 headline: "Build it well."
 headline_accent: "See it through."
-intro: "I'm a Senior Software Engineer who works across the stack — React on the front, C# and SQL Server on the back. I take work from understanding the problem through design, implementation, testing, and production support."
+intro: "I'm Thanh, a Senior Software Engineer. I build production software, investigate how systems behave, and write about the decisions along the way."
 profile_title: "Deep in the code. Mindful of the system."
-profile_summary: "I work where user-facing behavior and system internals meet — building features end to end, from the UI through the API to the data layer and back."
-profile_focus: "Fullstack — UI through data layer"
-profile_practice: "React · C# · SQL · APIs · automated tests"
-profile_evidence: "Code-level decisions · failure analysis · delivery lessons"
-contact_title: "What does your team need to build next?"
-contact_summary: "I’m interested in Senior Software Engineer opportunities with meaningful fullstack ownership, production responsibility, and room to contribute to system design."
-contact_label: "github.com/thanhxtruong"
-contact_url: "https://github.com/thanhxtruong"
+profile_summary: "I work across the stack, from the interface to the database, with an interest in the places where systems meet and assumptions break."
+profile_building: "Fullstack applications & event-driven services"
+profile_working_in: "React · C# · SQL · Azure"
+profile_exploring: "Architectural judgment & dependable AI"
 ---
