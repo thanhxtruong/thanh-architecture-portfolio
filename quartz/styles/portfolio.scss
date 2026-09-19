@@ -987,27 +987,43 @@ pre {
   gap: 1.9rem;
   padding: 1.55rem 0;
   border-bottom: 1px solid var(--portfolio-line);
+  background: transparent;
+  color: inherit;
+  font-weight: 400;
   text-decoration: none;
 
-  h2 {
-    margin-bottom: 0.5rem;
-    font-size: 1.75rem;
+  .external-icon {
+    display: none;
   }
 
-  p {
-    margin: 0;
-    font-size: 0.87rem;
-    overflow-wrap: anywhere;
-  }
-
-  > span {
-    align-self: center;
-    color: var(--portfolio-accent);
-  }
-
-  &:hover h2 {
+  &:hover .portfolio-contact-link-title {
     text-decoration: underline;
   }
+}
+
+.portfolio-contact-link-copy {
+  display: block;
+  min-width: 0;
+}
+
+.portfolio-contact-link-title {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--portfolio-ink);
+  font: 400 1.75rem/1.13 var(--portfolio-serif);
+  letter-spacing: -0.025em;
+}
+
+.portfolio-contact-link-description {
+  display: block;
+  color: var(--portfolio-muted);
+  font-size: 0.87rem;
+  overflow-wrap: anywhere;
+}
+
+.portfolio-contact-link-arrow {
+  align-self: center;
+  color: var(--portfolio-accent);
 }
 
 .content-meta,

@@ -14,7 +14,7 @@ cssclasses:
 </header>
 
 <div class="portfolio-contact-links">
-  <a class="portfolio-contact-link" href="mailto:thanh.truong4511@gmail.com"><div><h2>Email</h2><p>thanh.truong4511@gmail.com</p></div><span aria-hidden="true">↗</span></a>
-  <a class="portfolio-contact-link" href="https://github.com/thanhxtruong" target="_blank" rel="noopener noreferrer"><div><h2>GitHub</h2><p>Code, projects, and the work behind the writing.</p></div><span aria-hidden="true">↗</span></a>
-  <a class="portfolio-contact-link internal" href="./about#resume"><div><h2>Résumé</h2><p>My experience, technical practice, and professional background.</p></div><span aria-hidden="true">→</span></a>
+  <a class="portfolio-contact-link" href="mailto:thanh.truong4511@gmail.com"><span class="portfolio-contact-link-copy"><span class="portfolio-contact-link-title">Email</span><span class="portfolio-contact-link-description">thanh.truong4511@gmail.com</span></span><span class="portfolio-contact-link-arrow" aria-hidden="true">↗</span></a>
+  <a class="portfolio-contact-link" href="https://github.com/thanhxtruong" target="_blank" rel="noopener noreferrer"><span class="portfolio-contact-link-copy"><span class="portfolio-contact-link-title">GitHub</span><span class="portfolio-contact-link-description">Code, projects, and the work behind the writing.</span></span><span class="portfolio-contact-link-arrow" aria-hidden="true">↗</span></a>
+  <a class="portfolio-contact-link internal" href="./about#resume"><span class="portfolio-contact-link-copy"><span class="portfolio-contact-link-title">Résumé</span><span class="portfolio-contact-link-description">My experience, technical practice, and professional background.</span></span><span class="portfolio-contact-link-arrow" aria-hidden="true">→</span></a>
 </div>
