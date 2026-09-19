@@ -6,7 +6,7 @@ configuration:
   enablePopovers: true
   analytics: null
   locale: en-US
-  baseUrl: thanhxtruong.github.io/thanh-architecture-portfolio
+  baseUrl: builtbythanh.com
   ignorePatterns:
     - private
     - templates
@@ -31,15 +31,15 @@ configuration:
         highlight: "rgba(172,63,43,0.10)"
         textHighlight: "rgba(172,63,43,0.16)"
       darkMode:
-        light: "#f6f4ee"
-        lightgray: "#eceee5"
-        gray: "#9da49c"
-        darkgray: "#59635d"
-        dark: "#202c2a"
-        secondary: "#ac3f2b"
-        tertiary: "#364f42"
-        highlight: "rgba(172,63,43,0.10)"
-        textHighlight: "rgba(172,63,43,0.16)"
+        light: "#151b1a"
+        lightgray: "#222c29"
+        gray: "#748079"
+        darkgray: "#aab2ac"
+        dark: "#e8e7df"
+        secondary: "#e2785e"
+        tertiary: "#86a891"
+        highlight: "rgba(226,120,94,0.14)"
+        textHighlight: "rgba(226,120,94,0.22)"
 plugins:
   - source: "@quartz-community/created-modified-date"
     enabled: true
@@ -212,9 +212,9 @@ plugins:
     options:
       links:
         GitHub: https://github.com/thanhxtruong
-        Case Studies: https://thanhxtruong.github.io/thanh-architecture-portfolio/#case-studies
-        Writing: https://thanhxtruong.github.io/thanh-architecture-portfolio/writing/
-        RSS: https://thanhxtruong.github.io/thanh-architecture-portfolio/index.xml
+        Case Studies: https://builtbythanh.com/case-studies/
+        Writing: https://builtbythanh.com/writing/
+        RSS: https://builtbythanh.com/index.xml
     layout:
       position: footer
       priority: 50

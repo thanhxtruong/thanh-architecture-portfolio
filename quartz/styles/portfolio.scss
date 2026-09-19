@@ -1,7 +1,6 @@
 @use "./variables.scss" as *;
 
-:root,
-:root[saved-theme="dark"] {
+:root {
   --portfolio-paper: #f6f4ee;
   --portfolio-white: #fffef9;
   --portfolio-ink: #202c2a;
@@ -10,9 +9,24 @@
   --portfolio-accent: #ac3f2b;
   --portfolio-soft: #eceee5;
   --portfolio-green: #364f42;
+  --portfolio-header: rgb(246 244 238 / 97%);
   --portfolio-serif: Georgia, "Times New Roman", serif;
   --portfolio-sans: Arial, Helvetica, sans-serif;
   --portfolio-mono: "Courier New", ui-monospace, monospace;
+  color-scheme: light;
+}
+
+:root[saved-theme="dark"] {
+  --portfolio-paper: #151b1a;
+  --portfolio-white: #1c2422;
+  --portfolio-ink: #e8e7df;
+  --portfolio-muted: #aab2ac;
+  --portfolio-line: #36403c;
+  --portfolio-accent: #e2785e;
+  --portfolio-soft: #222c29;
+  --portfolio-green: #294438;
+  --portfolio-header: rgb(21 27 26 / 97%);
+  color-scheme: dark;
 }
 
 * {
@@ -132,7 +146,7 @@ pre {
     top: 0;
     margin: 0;
     border-bottom: 1px solid var(--portfolio-line);
-    background: rgb(246 244 238 / 97%);
+    background: var(--portfolio-header);
     backdrop-filter: blur(14px);
   }
 
@@ -177,6 +191,7 @@ pre {
   flex-shrink: 0;
   align-items: center;
   gap: 0.8rem;
+  margin-right: auto;
   line-height: 1.25;
   text-decoration: none;
 
@@ -194,6 +209,54 @@ pre {
     font: 0.63rem var(--portfolio-mono);
     letter-spacing: 0.1em;
     text-transform: uppercase;
+  }
+}
+
+.portfolio-nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.portfolio-theme-toggle {
+  display: grid;
+  width: 2.15rem;
+  height: 2.15rem;
+  flex: 0 0 auto;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--portfolio-line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--portfolio-ink);
+
+  &:hover {
+    background: var(--portfolio-soft);
+  }
+}
+
+.portfolio-theme-icon {
+  grid-area: 1 / 1;
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentcolor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.65;
+}
+
+.portfolio-theme-sun {
+  display: none;
+}
+
+:root[saved-theme="dark"] {
+  .portfolio-theme-moon {
+    display: none;
+  }
+
+  .portfolio-theme-sun {
+    display: block;
   }
 }
 
@@ -859,6 +922,30 @@ pre {
   }
 }
 
+:root[saved-theme="dark"] .artifact-diagram {
+  rect[fill="#f0ebe0"] {
+    fill: #27332f;
+  }
+
+  rect[stroke="#8a8578"] {
+    stroke: #748079;
+  }
+
+  path[stroke="#b4533a"] {
+    stroke: var(--portfolio-accent);
+  }
+
+  path[fill="#b4533a"],
+  text[fill="#b4533a"] {
+    fill: var(--portfolio-accent);
+  }
+
+  text[fill="#6b6559"],
+  text[fill="#8a6b5a"] {
+    fill: var(--portfolio-muted);
+  }
+}
+
 .portfolio-static-page {
   padding-bottom: 4.4rem;
 }
@@ -1120,8 +1207,13 @@ a.portfolio-contact-link {
     display: block;
   }
 
+  .portfolio-nav-controls {
+    order: 2;
+  }
+
   .portfolio-nav {
     display: none;
+    order: 3;
     flex-basis: 100%;
     justify-content: space-between;
     gap: 0.75rem;
